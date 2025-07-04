@@ -1,0 +1,179 @@
+<category-filter class="main_container category-filter">
+  <div class="category-filter__wrapper">
+    <button class="category_slide_button prev-button" aria-label="Previous">←</button>
+    <div id="aiCategories" class="category-filter__list"></div>
+    {% comment %} <ul class="category-filter__list">
+      {%- for collection in collections -%}
+        <li class="category-filter__item">
+          <span class="category-filter__button{% if collection.url == request.path %} is-active{% endif %}" data-category="{{ collection.handle }}">
+            {{ collection.title }}
+          </span>
+        </li>
+      {%- endfor -%}
+    </ul> {% endcomment %}
+    <button class="category_slide_button next-button" aria-label="Next">→</button>
+  </div>
+</category-filter>
+
+<style>
+  .category-filter__wrapper {
+    padding-top: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+
+  .category-filter__heading {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .category-filter__list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 80%;
+  }
+
+  .category-filter__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-filter__list.is-dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+  }
+
+  .category-filter__list.is-dragging * {
+    pointer-events: none;
+  }
+
+  .category-filter__item {
+    color: #000;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    border-radius: 999px;
+    border: 1px solid var(--200, #D9D9D9);
+    background: var(--White, #FFF);
+    padding: 8px 18px;
+    text-align: center;
+  }
+
+  .category-filter__item:hover {
+    color: #fff;
+    background: var(--Black, #000);
+    transform: translateY(-2px);
+  }
+
+  .category-filter__button {
+    text-align: center;
+    font-family: Gabarito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+
+  .category_slide_button {
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .category_slide_button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .category-filter__button p {
+    margin: 15px 0 0 !important;
+  }
+
+  .category-filter__count {
+    font-size: 0.9em;
+    opacity: 0.7;
+  }
+
+  .category-filter__nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+
+  .prev-button {
+    left: 5px;
+  }
+
+  .next-button {
+    right: 5px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .category-filter__item {
+      padding: 5px 10px;
+    }
+
+    .category-filter__button {
+      text-align: left;
+      width: 100%;
+    }
+  }
+</style>
+<script src="{{ 'category-filter.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+  {
+    "name": "Category Filter",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Shop by Category"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Category Filter"
+      }
+    ]
+  }
+{% endschema %}

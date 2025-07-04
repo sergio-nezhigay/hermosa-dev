@@ -1,0 +1,220 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "instant-slider": {
+      "type": "instant-slider",
+      "settings": {}
+    },
+    "category_filter_dmUke7": {
+      "type": "category-filter",
+      "settings": {
+        "title": ""
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "columns_desktop": 4,
+        "columns_mobile": "1",
+        "color_scheme": "scheme-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "testimonials_video_bcgpHa": {
+      "type": "testimonials-video",
+      "blocks": {
+        "heading_HyhmHE": {
+          "type": "heading",
+          "settings": {
+            "heading": "<h3>WORDS THAT INSPIRE US</h3>",
+            "heading_custom": false,
+            "heading_font": "josefin_sans_n4",
+            "heading_size": 44,
+            "heading_size_mobile": 36,
+            "heading_height": 130,
+            "heading_mt": 20,
+            "heading_mt_mobile": 20,
+            "heading_color": "#121212"
+          }
+        },
+        "review_RAAr4z": {
+          "type": "review",
+          "settings": {
+            "review_mt": 24,
+            "review_mt_mobile": 16,
+            "stars_count": 5,
+            "stars_size": 16,
+            "stars_size_mobile": 16,
+            "review": "<p>Excellent <strong>4.8</strong> | 100,000+ Customers</p>",
+            "review_custom": false,
+            "review_font": "josefin_sans_n4",
+            "review_size": 15,
+            "review_size_mobile": 15,
+            "review_height": 150,
+            "stars_color": "#eec637",
+            "review_color": "#121212"
+          }
+        },
+        "video_gfTnxf": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "sub_title": "Subtitle",
+            "title": "Title",
+            "author": "Author"
+          }
+        },
+        "video_pYMFmV": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "sub_title": "Subtitle",
+            "title": "Title",
+            "author": "Author"
+          }
+        },
+        "video_L3eEW8": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "sub_title": "Subtitle",
+            "title": "Title",
+            "author": "Author"
+          }
+        },
+        "video_UqNf9i": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "sub_title": "Subtitle",
+            "title": "Title",
+            "author": "Author"
+          }
+        },
+        "video_rPgwqJ": {
+          "type": "video",
+          "settings": {
+            "video_url": "",
+            "sub_title": "Subtitle",
+            "title": "Title",
+            "author": "Author"
+          }
+        }
+      },
+      "block_order": [
+        "heading_HyhmHE",
+        "review_RAAr4z",
+        "video_gfTnxf",
+        "video_pYMFmV",
+        "video_L3eEW8",
+        "video_UqNf9i",
+        "video_rPgwqJ"
+      ],
+      "name": "Video testimonial",
+      "settings": {
+        "layout": "content_slider",
+        "layout_mobile": "content_slider",
+        "layout_gap": 48,
+        "layout_gap_mobile": 32,
+        "content_align": "left",
+        "content_align_mobile": "center",
+        "content_vertical_align": "start",
+        "slider_gap": 28,
+        "slider_gap_mobile": 16,
+        "slider_view": 3,
+        "slider_view_mobile": 1.5,
+        "slide_radius": 0,
+        "slide_border_thickness": 0,
+        "slide_ratio": "portrait",
+        "slide_ratio_mobile": "portrait",
+        "slide_content_align": "left",
+        "slide_content_align_mobile": "left",
+        "controls_size": 60,
+        "controls_size_mobile": 50,
+        "mute_size": 32,
+        "mute_size_mobile": 20,
+        "arrow_show_desktop": true,
+        "arrow_show_mobile": true,
+        "arrow_size": 48,
+        "arrow_size_mobile": 48,
+        "arrow_icon_size": 9,
+        "arrow_icon_size_mobile": 9,
+        "arrow_border_thickness": 1,
+        "arrow_radius": 100,
+        "arrow_mt": 32,
+        "arrow_mt_mobile": 24,
+        "arrow_hover_effect": "color",
+        "sub_title_custom": false,
+        "sub_title_font": "josefin_sans_n4",
+        "sub_title_size": 16,
+        "sub_title_size_mobile": 13,
+        "sub_title_height": 150,
+        "sub_title_mt": 16,
+        "sub_title_mt_mobile": 12,
+        "title_custom": false,
+        "title_font": "josefin_sans_n4",
+        "title_size": 20,
+        "title_size_mobile": 18,
+        "title_height": 130,
+        "title_mt": 6,
+        "title_mt_mobile": 6,
+        "author_custom": false,
+        "author_font": "josefin_sans_n4",
+        "author_size": 16,
+        "author_size_mobile": 13,
+        "author_height": 130,
+        "author_mt": 6,
+        "author_mt_mobile": 6,
+        "controls_icon_color": "#ffffff",
+        "controls_bg_color": "#121212",
+        "mute_icon_color": "#ffffff",
+        "slide_border_color": "#121212",
+        "sub_title_color": "#121212",
+        "title_color": "#121212",
+        "author_color": "#121212",
+        "arrow_color": "#7b7b7b",
+        "arrow_hover_color": "#7b7b7b",
+        "arrow_bg_color": "#ebebeb",
+        "arrow_bg_hover_color": "#f5f5f5",
+        "arrow_border_color": "#c7c7c7",
+        "arrow_border_hover_color": "#c7c7c7",
+        "background_color": "#ffffff",
+        "background_gradient": "",
+        "border_color": "#121212",
+        "margin_top": 0,
+        "margin_bottom": 0,
+        "margin_horizontal": 0,
+        "margin_horizontal_mobile": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_horizontal": 5,
+        "padding_horizontal_mobile": 1.5,
+        "full_width": true,
+        "content_width": 1200,
+        "border_thickness": 0,
+        "section_radius": 0,
+        "lazy": true
+      }
+    }
+  },
+  "order": [
+    "instant-slider",
+    "category_filter_dmUke7",
+    "product-grid",
+    "testimonials_video_bcgpHa"
+  ]
+}

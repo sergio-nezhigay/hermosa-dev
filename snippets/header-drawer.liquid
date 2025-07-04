@@ -1,0 +1,357 @@
+{% comment %}
+  Renders a header drawer menu for mobile and desktop.
+
+  Usage:
+  {% render 'header-drawer' %}
+{% endcomment %}
+
+<header-drawer data-breakpoint="{% if section.settings.menu_type_desktop == 'drawer' %}desktop{% else %}tablet{% endif %}">
+  <details id="Details-menu-drawer-container" class="menu-drawer-container">
+    <summary
+      class="header__icon header__icon--menu header__icon--summary link focus-inset"
+      aria-label="{{ 'sections.header.menu' | t }}"
+    >
+      <span>
+        {{- 'material-symbols-light_menu.svg' | inline_asset_content -}}
+        {{- 'icon-close.svg' | inline_asset_content -}}
+      </span>
+    </summary>
+    <div id="menu-drawer" class="gradient menu-drawer motion-reduce color-{{ section.settings.menu_color_scheme }}">
+      <div class="menu-drawer__inner-container">
+        <div class="flex flex-col">
+          <span class="h2 uppercase header_text">
+            {{ shop.name }}
+          </span>
+          <div class="justify-end close_icon" onclick="document.getElementById('Details-menu-drawer-container').removeAttribute('open');document.getElementById('Details-menu-drawer-container').classList.remove('menu-opening');document.querySelector('#Details-menu-drawer-container .header__icon').setAttribute('aria-expanded', false);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M8 8.9264L1.13575 15.7906C1.01363 15.9128 0.863591 15.9782 0.685639 15.9869C0.507687 15.9956 0.348926 15.9302 0.209355 15.7906C0.069785 15.6511 0 15.4967 0 15.3274C0 15.1582 0.069785 15.0038 0.209355 14.8642L7.0736 8L0.209355 1.13575C0.0872313 1.01363 0.0218075 0.863591 0.0130844 0.685639C0.00436125 0.507687 0.069785 0.348926 0.209355 0.209355C0.348926 0.069785 0.503326 0 0.672555 0C0.841784 0 0.996184 0.069785 1.13575 0.209355L8 7.0736L14.8642 0.209355C14.9864 0.0872313 15.1368 0.0218075 15.3157 0.0130844C15.4927 0.00436125 15.6511 0.069785 15.7906 0.209355C15.9302 0.348926 16 0.503326 16 0.672555C16 0.841784 15.9302 0.996184 15.7906 1.13575L8.9264 8L15.7906 14.8642C15.9128 14.9864 15.9782 15.1368 15.9869 15.3157C15.9956 15.4927 15.9302 15.6511 15.7906 15.7906C15.6511 15.9302 15.4967 16 15.3274 16C15.1582 16 15.0038 15.9302 14.8642 15.7906L8 8.9264Z" fill="#3A3A3A"/>
+            </svg>
+          </div>
+        </div>
+        <div class="menu-drawer__navigation-container">
+          <nav class="menu-drawer__navigation">
+            <div class="footer_links_item" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <span class="header-title">{{ block.settings.heading }}</span>
+              {%- endif -%}
+              {%- if linklists[block.settings.menu].links.size > 0 -%}
+                <div class="footer_links">
+                  {%- for link in linklists[block.settings.menu].links -%}
+                    <a href="{{ link.url }}" class="footer_link footer_link_inactive">{{ link.title }}</a>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+            {% comment %} <ul class="menu-drawer__menu has-submenu list-menu" role="list">
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        ABOUT
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        WISHLIST
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        COLLECTIONS
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        TRY ON YOUR WALL
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        RETURN POLICY
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        TERMS & CONDITIONS
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+                <li>
+                    <details id="Details-menu-drawer-menu-item-home">
+                      <summary
+                        id="HeaderDrawer-home"
+                        class="menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item"
+                      >
+                        CONTACTS
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                    </details>
+                </li>
+            </ul>
+            <div class="social_icons">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M22 11.9998C22 6.47982 17.52 1.99982 12 1.99982C6.48 1.99982 2 6.47982 2 11.9998C2 16.8398 5.44 20.8698 10 21.7998V14.9998H8V11.9998H10V9.49982C10 7.56982 11.57 5.99982 13.5 5.99982H16V8.99982H14C13.45 8.99982 13 9.44982 13 9.99982V11.9998H16V14.9998H13V21.9498C18.05 21.4498 22 17.1898 22 11.9998Z" fill="#3A3A3A"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M20.9471 8.30526C20.937 7.54789 20.7952 6.79804 20.5281 6.08926C20.2964 5.49141 19.9426 4.94846 19.4892 4.49509C19.0359 4.04173 18.4929 3.68791 17.8951 3.45626C17.1954 3.19362 16.4562 3.0516 15.7091 3.03626C14.7471 2.99326 14.4421 2.98126 12.0001 2.98126C9.55807 2.98126 9.24507 2.98126 8.29007 3.03626C7.54323 3.05172 6.80442 3.19373 6.10507 3.45626C5.50713 3.68775 4.96409 4.04151 4.5107 4.49489C4.05732 4.94828 3.70356 5.49132 3.47207 6.08926C3.2089 6.78839 3.06719 7.52737 3.05307 8.27426C3.01007 9.23726 2.99707 9.54226 2.99707 11.9843C2.99707 14.4263 2.99707 14.7383 3.05307 15.6943C3.06807 16.4423 3.20907 17.1803 3.47207 17.8813C3.70395 18.479 4.05797 19.0218 4.51151 19.475C4.96505 19.9282 5.50813 20.2818 6.10607 20.5133C6.8035 20.7865 7.54244 20.9386 8.29107 20.9633C9.25407 21.0063 9.55907 21.0193 12.0011 21.0193C14.4431 21.0193 14.7561 21.0193 15.7111 20.9633C16.4582 20.9485 17.1974 20.8069 17.8971 20.5443C18.4948 20.3123 19.0376 19.9584 19.4909 19.5051C19.9442 19.0518 20.2982 18.509 20.5301 17.9113C20.7931 17.2113 20.9341 16.4733 20.9491 15.7243C20.9921 14.7623 21.0051 14.4573 21.0051 12.0143C21.0031 9.57226 21.0031 9.26226 20.9471 8.30526ZM11.9941 16.6023C9.44007 16.6023 7.37107 14.5333 7.37107 11.9793C7.37107 9.42526 9.44007 7.35626 11.9941 7.35626C13.2202 7.35626 14.396 7.84333 15.263 8.71031C16.13 9.57729 16.6171 10.7532 16.6171 11.9793C16.6171 13.2054 16.13 14.3812 15.263 15.2482C14.396 16.1152 13.2202 16.6023 11.9941 16.6023ZM16.8011 8.26326C16.6595 8.26339 16.5192 8.2356 16.3884 8.18147C16.2575 8.12734 16.1386 8.04794 16.0385 7.94782C15.9384 7.84769 15.859 7.7288 15.8049 7.59795C15.7507 7.4671 15.7229 7.32686 15.7231 7.18526C15.7231 7.04376 15.7509 6.90365 15.8051 6.77292C15.8592 6.64219 15.9386 6.52341 16.0387 6.42335C16.1387 6.3233 16.2575 6.24393 16.3882 6.18978C16.519 6.13563 16.6591 6.10776 16.8006 6.10776C16.9421 6.10776 17.0822 6.13563 17.2129 6.18978C17.3436 6.24393 17.4624 6.3233 17.5625 6.42335C17.6625 6.52341 17.7419 6.64219 17.7961 6.77292C17.8502 6.90365 17.8781 7.04376 17.8781 7.18526C17.8781 7.78126 17.3961 8.26326 16.8011 8.26326Z" fill="#3A3A3A"/>
+                <path d="M11.994 14.982C13.6525 14.982 14.997 13.6375 14.997 11.979C14.997 10.3205 13.6525 8.97601 11.994 8.97601C10.3355 8.97601 8.99097 10.3205 8.99097 11.979C8.99097 13.6375 10.3355 14.982 11.994 14.982Z" fill="#3A3A3A"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M22.46 6C21.69 6.35 20.86 6.58 20 6.69C20.88 6.16 21.56 5.32 21.88 4.31C21.05 4.81 20.13 5.16 19.16 5.36C18.37 4.5 17.26 4 16 4C13.65 4 11.73 5.92 11.73 8.29C11.73 8.63 11.77 8.96 11.84 9.27C8.28004 9.09 5.11004 7.38 3.00004 4.79C2.63004 5.42 2.42004 6.16 2.42004 6.94C2.42004 8.43 3.17004 9.75 4.33004 10.5C3.62004 10.5 2.96004 10.3 2.38004 10V10.03C2.38004 12.11 3.86004 13.85 5.82004 14.24C5.19077 14.4122 4.53013 14.4362 3.89004 14.31C4.16165 15.1625 4.69358 15.9084 5.41106 16.4429C6.12854 16.9775 6.99549 17.2737 7.89004 17.29C6.37367 18.4904 4.49404 19.1393 2.56004 19.13C2.22004 19.13 1.88004 19.11 1.54004 19.07C3.44004 20.29 5.70004 21 8.12004 21C16 21 20.33 14.46 20.33 8.79C20.33 8.6 20.33 8.42 20.32 8.23C21.16 7.63 21.88 6.87 22.46 6Z" fill="#3A3A3A"/>
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M9.04 21.54C10 21.83 10.97 22 12 22C14.6522 22 17.1957 20.9464 19.0711 19.0711C20.9464 17.1957 22 14.6522 22 12C22 10.6868 21.7413 9.38642 21.2388 8.17317C20.7362 6.95991 19.9997 5.85752 19.0711 4.92893C18.1425 4.00035 17.0401 3.26375 15.8268 2.7612C14.6136 2.25866 13.3132 2 12 2C10.6868 2 9.38642 2.25866 8.17317 2.7612C6.95991 3.26375 5.85752 4.00035 4.92893 4.92893C3.05357 6.8043 2 9.34784 2 12C2 16.25 4.67 19.9 8.44 21.34C8.35 20.56 8.26 19.27 8.44 18.38L9.59 13.44C9.59 13.44 9.3 12.86 9.3 11.94C9.3 10.56 10.16 9.53 11.14 9.53C12 9.53 12.4 10.16 12.4 10.97C12.4 11.83 11.83 13.06 11.54 14.24C11.37 15.22 12.06 16.08 13.06 16.08C14.84 16.08 16.22 14.18 16.22 11.5C16.22 9.1 14.5 7.46 12.03 7.46C9.21 7.46 7.55 9.56 7.55 11.77C7.55 12.63 7.83 13.5 8.29 14.07C8.38 14.13 8.38 14.21 8.35 14.36L8.06 15.45C8.06 15.62 7.95 15.68 7.78 15.56C6.5 15 5.76 13.18 5.76 11.71C5.76 8.55 8 5.68 12.32 5.68C15.76 5.68 18.44 8.15 18.44 11.43C18.44 14.87 16.31 17.63 13.26 17.63C12.29 17.63 11.34 17.11 11 16.5L10.33 18.87C10.1 19.73 9.47 20.88 9.04 21.57V21.54Z" fill="#3A3A3A"/>
+              </svg>
+            </div> {% endcomment %}
+            {%- assign footer_section = sections['footer'] -%}
+            {%- if footer_section and footer_section.blocks.size > 0 -%}
+              {%- for block in footer_section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'link_list' -%}
+                    <div class="footer_links_item" {{ block.shopify_attributes }}>
+                      {%- if block.settings.heading != blank -%}
+                        <span class="footer-title">{{ block.settings.heading }}</span>
+                      {%- endif -%}
+                      {%- if linklists[block.settings.menu].links.size > 0 -%}
+                        <div class="footer_links">
+                          {%- for link in linklists[block.settings.menu].links -%}
+                            <a href="{{ link.url }}" class="header-title footer_link_inactive">{{ link.title }}</a>
+                          {%- endfor -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  
+                  {%- when 'main_menu' -%}
+                    <div class="footer_links_item" {{ block.shopify_attributes }}>
+                      <div class="footer_links">
+                        {%- for link in linklists.main-menu.links -%}
+                          <a href="{{ link.url }}" class="header-title header_link {% if link.active %}footer_link_active{% else %}footer_link_inactive{% endif %} menu-drawer__menu-item list-menu__item link link--text focus-inset menu-drawer__menu-item">{{ link.title }}</a>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  
+                {%- endcase -%}
+              {%- endfor -%}
+            {%- else -%}
+              {%- comment -%} Fallback menu if footer section is not available {%- endcomment -%}
+              <div class="footer_links_item">
+                <div class="footer_links">
+                  {%- for link in linklists.main-menu.links -%}
+                    <a href="{{ link.url }}" class="header-title {% if link.active %}footer_link_active{% else %}footer_link_inactive{% endif %}">{{ link.title }}</a>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+          </nav>
+          
+          <div class="menu-drawer__utility-links">
+            
+            {%- if shop.customer_accounts_enabled -%}
+              <a
+                href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                class="menu-drawer__account link focus-inset h5 medium-hide large-up-hide"
+                rel="nofollow"
+              >
+                {%- if section.settings.enable_customer_avatar -%}
+                  <account-icon>
+                    {%- if customer and customer.has_avatar? -%}
+                      {{ customer | avatar }}
+                    {%- else -%}
+                      <span class="svg-wrapper">
+                        {{- 'mdi-light_account.svg' | inline_asset_content -}}
+                      </span>
+                    {%- endif -%}
+                  </account-icon>
+                {%- else -%}
+                  <span class="svg-wrapper">
+                    {{- 'mdi-light_account.svg' | inline_asset_content -}}
+                  </span>
+                {%- endif -%}
+                {%- liquid
+                  if customer
+                    echo 'customer.account_fallback' | t
+                  else
+                    echo 'customer.log_in' | t
+                  endif
+                -%}
+              </a>
+            {%- endif -%}
+            {%- if localization.available_countries or localization.available_languages -%}
+              <div class="menu-drawer__localization header-localization">
+                {%- if localization.available_countries and localization.available_countries.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'HeaderCountryMobileForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderCountryMobileLabel">
+                          {{ 'localization.country_label' | t }}
+                        </h2>
+                        {%- render 'country-localization', localPosition: 'HeaderCountryMobile' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {% endif %}
+
+                {%- if localization.available_languages and localization.available_languages.size > 1 -%}
+                  <localization-form>
+                    {%- form 'localization', id: 'HeaderLanguageMobileForm', class: 'localization-form' -%}
+                      <div>
+                        <h2 class="visually-hidden" id="HeaderLanguageMobileLabel">
+                          {{ 'localization.language_label' | t }}
+                        </h2>
+                        {%- render 'language-localization', localPosition: 'HeaderLanguageMobile' -%}
+                      </div>
+                    {%- endform -%}
+                  </localization-form>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+            <ul class="list list-social list-unstyled" role="list">
+              {%- if settings.social_twitter_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_twitter_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-twitter.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_facebook_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_facebook_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-facebook.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_pinterest_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_pinterest_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-pinterest.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_instagram_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_instagram_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-instagram.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tiktok_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_tiktok_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-tiktok.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_tumblr_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_tumblr_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-tumblr.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_snapchat_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_snapchat_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-snapchat.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_youtube_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_youtube_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-youtube.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if settings.social_vimeo_link != blank -%}
+                <li class="list-social__item">
+                  <a href="{{ settings.social_vimeo_link }}" class="list-social__link link">
+                    <span class="svg-wrapper">
+                      {{- 'icon-vimeo.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+  <script>
+    document.querySelector('.close_icon').addEventListener('click', function() {
+      document.getElementById('Details-menu-drawer-container').removeAttribute('open');
+    });
+  </script>
+</header-drawer>

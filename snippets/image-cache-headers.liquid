@@ -1,0 +1,35 @@
+{% comment %}
+  Image Cache Headers Snippet
+  Include this in your theme.liquid head section for better image caching
+{% endcomment %}
+
+<!-- Preconnect to CDN for faster image loading -->
+<link rel="preconnect" href="{{ settings.cdn_url | default: 'https://cdn.shopify.com' }}">
+<link rel="dns-prefetch" href="{{ settings.cdn_url | default: 'https://cdn.shopify.com' }}">
+
+<!-- Cache control meta tags -->
+<meta http-equiv="Cache-Control" content="public, max-age=31536000, immutable">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Preload critical product images -->
+{% if product.featured_media %}
+  <link rel="preload" as="image" href="{{ product.featured_media | image_url: width: 800 }}" fetchpriority="high">
+{% endif %}
+
+{% for media in product.media limit: 3 %}
+  {% if media.media_type == 'image' %}
+    <link rel="preload" as="image" href="{{ media | image_url: width: 600 }}" fetchpriority="{% if forloop.first %}high{% else %}low{% endif %}">
+  {% endif %}
+{% endfor %}
+
+<!-- Service Worker cache manifest -->
+<script>
+  // Expose product images for service worker caching
+  window.productImageUrls = [
+    {% for media in product.media %}
+      {% if media.media_type == 'image' %}
+        "{{ media | image_url: width: 800 }}"{% unless forloop.last %},{% endunless %}
+      {% endif %}
+    {% endfor %}
+  ];
+</script> 

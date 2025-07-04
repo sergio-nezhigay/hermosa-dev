@@ -1,0 +1,1279 @@
+<link rel="stylesheet" href="{{ 'base.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}">
+{% comment %} <link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}"> {% endcomment %}
+<link rel="stylesheet" href="{{ 'custom-drawer.css' | asset_url }}">
+<link
+  rel="stylesheet"
+  href="{{ 'component-cart-notification.css' | asset_url }}"
+  media="print"
+  onload="this.media='all'"
+>
+{% comment %} {%- if settings.predictive_search_enabled -%}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%} {% endcomment %}
+
+{% comment %} {%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%} {% endcomment %}
+
+<style>
+  header-drawer {
+    justify-self: start;
+    margin-left: -1.2rem;
+  }
+
+  {%- if section.settings.sticky_header_type == 'reduce-logo-size' -%}
+    .scrolled-past-header .header__heading-logo-wrapper {
+      width: 75%;
+    }
+  {%- endif -%}
+
+  .menu-drawer-container {
+    display: flex;
+  }
+
+  .list-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .list-menu--inline {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  summary.list-menu__item {
+    padding-right: 2.7rem;
+  }
+
+  .list-menu__item {
+    display: flex;
+    align-items: center;
+    line-height: calc(1 + 0.3 / var(--font-body-scale));
+  }
+
+  .list-menu__item--link {
+    text-decoration: none;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    line-height: calc(1 + 0.8 / var(--font-body-scale));
+  }
+
+  @media screen and (min-width: 750px) {
+    .list-menu__item--link {
+      padding-bottom: 0.5rem;
+      padding-top: 0.5rem;
+    }
+  }
+
+  .wishlist-sidebar {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: #ffffff;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  .wishlist-sidebar.active {
+    right: 0;
+  }
+
+  .wishlist-sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .wishlist-sidebar-header span {
+    margin: 0;
+    color: #3A3A3A !important;
+    text-align: center;
+    font-family: Gabarito;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 52px;
+    text-transform: uppercase;
+  }
+
+  .wishlist-sidebar-header h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+
+  .wishlist-sidebar-content {
+    padding: 20px;
+    overflow-y: auto;
+    height: calc(100% - 70px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .wishlist-sidebar {
+      width: 100%;
+      right: -100%;
+    }
+  }
+
+  /* Add these styles for the menu button */
+  .header__icon--menu .icon-hamburger {
+    display: none; /* Hide the default icon */
+  }
+
+  .header__icon--menu svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Add these styles for the centered search form */
+  .header-search-container-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .header-search-form {
+    width: 100%;
+  }
+  
+  .header-search-form .field {
+    display: flex;
+    position: relative;
+  }
+  
+  .header-search-form .search__input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border-radius: 999px;
+    border: 1px solid var(--200, #D9D9D9);
+    background: var(--White, #FFF);
+    font-size: 14px;
+    color: #000;
+    font-family: "Switzer Variable";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%; 
+    letter-spacing: 0.14px;
+  }
+  
+  .header-search-form .field__button {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Header Search Results Panel Styles */
+  .header-search-form .search-results-panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-top: 8px;
+    display: none;
+    z-index: 1000;
+  }
+
+  .header-search-form .search-results-panel.active {
+    display: block;
+  }
+
+  .header-search-form .search-results-content {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .header-search-form .search-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  .header-search-form .search-results-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .header-search-form .search-results-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    color: #666;
+  }
+
+  .header-search-form .search-results-body {
+    padding: 20px;
+  }
+
+  .header-search-form .search-loading {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .header-search-form .loading-spinner {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  .header-search-form .search-results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+  }
+
+  .header-search-form .search-result-item {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .header-search-form .search-result-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .header-search-form .search-result-title {
+    margin: 8px 0 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .header-search-form .search-no-results {
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Make header flex layout */
+  header.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 3rem;
+  }
+  
+  /* Adjust logo and icons positioning */
+  .header__heading, .header__heading-link {
+    margin: 0;
+  }
+  
+  .header__icons {
+    display: flex;
+    align-items: center;
+  }
+  
+  @media screen and (max-width: 990px) {
+    .header-search-container-wrapper {
+      display: none;
+    }
+    
+    header.header {
+      justify-content: space-between;
+    }
+  }
+
+  /* Phone number styles */
+  .header__phone {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  .header__phone-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    font-family: "Switzer Variable", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    transition: color 0.3s ease;
+  }
+
+  .header__phone-link:hover {
+    color: #666;
+  }
+
+  .header__phone-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+  }
+
+  .header__phone-text {
+    white-space: nowrap;
+  }
+
+  @media screen and (max-width: 1200px) {
+    .header__phone {
+      display: none;
+    }
+  }
+</style>
+
+{%- style -%}
+  .header {
+    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+  }
+
+  .section-header {
+    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  .menu-drawer-container>.header__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-header {
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .header {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+  
+  .shopify-section-header-sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 990;
+    animation: slide-down 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  @keyframes slide-down {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+{%- endstyle -%}
+
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app_block = true
+    endif
+  endfor
+-%}
+
+{% liquid
+  assign header_tag = 'div'
+
+  if section.settings.sticky_header_type != 'none'
+    assign header_tag = 'sticky-header'
+  endif
+%}
+
+{% comment %} <{{ header_tag }}
+  {% if header_tag == 'sticky-header' %}
+    data-sticky-type="{{ section.settings.sticky_header_type }}"
+  {% endif %}
+  class="justify-center"
+> {% endcomment %}
+ <div class="justify-center w-full">
+  {%- liquid
+    assign social_links = false
+    assign localization_forms = false
+
+    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+      assign social_links = true
+    endif
+
+    if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
+      assign localization_forms = true
+    endif
+  -%}
+  <header class="main_container m-auto header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} {% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
+    <div class="flex items-center justify-between w-full">
+      <!-- Custom Menu Drawer -->
+      {%- if section.settings.menu != blank -%}
+        <button class="custom-menu-button" id="custom-menu-toggle" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 7H21M3 12H21M3 17H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <!-- Custom Drawer -->
+        {% render 'custom-drawer' %}
+      {%- endif -%}
+      
+      {%- comment -%}
+      {%- liquid
+        if section.settings.menu != blank
+          render 'header-drawer'
+        endif
+      -%}
+      {%- endcomment -%}
+
+      {%- if section.settings.logo_position != 'middle-center' -%}
+        {%- if request.page_type == 'index' -%}
+          <h1 class="header__heading justify-center">
+        {%- endif -%}
+        <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset justify-center ml-10">
+          {%- if settings.logo != blank -%}
+            <div class="header__heading-logo-wrapper">
+              {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+              {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+              {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+              {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+              {{
+                settings.logo
+                | image_url: width: 600
+                | image_tag:
+                  class: 'header__heading-logo motion-reduce',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+              }}
+            </div>
+          {%- else -%}
+            {% comment %} <span class="h2 uppercase header_text">{{ shop.name }}</span> {% endcomment %}
+            <span class="justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="115" height="15" viewBox="0 0 129 18" fill="none">
+                <path d="M112.616 17.75L119.831 0.25H121.835L129 17.75H125.894L124.566 14.375H117.025L115.673 17.75H112.616ZM118.027 11.875H123.564L120.808 4.9L118.027 11.875Z" fill="black"/>
+                <path d="M103.442 18C100.662 18 98.8328 17 97.3047 15.05L99.2587 13.1C100.236 14.5 101.463 15.325 103.543 15.325C105.472 15.325 106.724 14.475 106.724 13.075C106.724 8.975 98.407 11.125 98.407 4.875C98.407 1.8 100.912 0 104.144 0C106.449 0 108.302 1 109.455 2.4L107.501 4.35C106.499 3.225 105.472 2.675 104.069 2.675C102.315 2.675 101.288 3.4 101.288 4.675C101.288 8.375 109.605 6.4 109.605 12.9C109.605 16.05 107.225 18 103.442 18Z" fill="black"/>
+                <path d="M85.1706 18C80.1853 18 76.2021 13.975 76.2021 8.975C76.2021 3.975 80.1352 0 85.1205 0C90.1057 0 94.0639 3.975 94.0639 9C94.0639 14 90.1308 18 85.1706 18ZM85.1205 15.25C88.6527 15.25 91.1078 12.675 91.1078 8.975C91.1078 5.325 88.6277 2.75 85.1205 2.75C81.6133 2.75 79.1582 5.3 79.1582 8.975C79.1582 12.675 81.6133 15.25 85.1205 15.25Z" fill="black"/>
+                <path d="M54.0115 17.75V0.25H56.0156L62.6543 11.15L69.2929 0.25H71.2971V17.75H68.4161V6.55L63.6563 14.35H61.6522L56.8924 6.55V17.75H54.0115Z" fill="black"/>
+                <path d="M36.6193 17.75V0.25H43.1828C46.4896 0.25 48.7192 2.4 48.7192 5.3C48.7192 8.175 46.7401 10.1 43.7089 10.3L49.8716 17.75H46.2391L40.2518 10.325H39.5002V17.75H36.6193ZM43.0575 2.75H39.5002V7.95H43.0325C44.8111 7.95 45.8383 6.975 45.8383 5.35C45.8383 3.9 44.8111 2.75 43.0575 2.75Z" fill="black"/>
+                <path d="M19.8386 17.75V0.25H31.5127V2.875H22.7196V7.55H30.7862V10.075H22.7196V15.125H31.6379V17.75H19.8386Z" fill="black"/>
+                <path d="M0 17.75V0.25H2.88093V7.375H11.1479V0.25H14.0289V17.75H11.1479V10H2.88093V17.75H0Z" fill="black"/>
+              </svg>
+            </span>
+          {%- endif -%}
+        </a>
+        {%- if request.page_type == 'index' -%}
+          </h1>
+        {%- endif -%}
+      {%- endif -%}
+
+      <!-- Add search form in the center -->
+      <div class="header-search-container-wrapper">
+        {% if request.page_type == 'search' or request.page_type == 'product'%}
+          <div class="header-search-container">
+            <form
+              action="{{ routes.search_url }}"
+              method="get"
+              role="search"
+              class="search header-search-form">
+              <div class="field">
+                <input
+                  class="search__input field__input"
+                  id="Header-Search-Input"
+                  type="search"
+                  name="q"
+                  value="{{ search.terms | escape }}"
+                  placeholder="Enter keyword or artist name..."
+                  {%- if settings.predictive_search_enabled -%}
+                  role="combobox"
+                  aria-expanded="false"
+                  aria-owns="predictive-search-results"
+                  aria-controls="predictive-search-results"
+                  aria-haspopup="listbox"
+                  aria-autocomplete="list"
+                  autocorrect="off"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  spellcheck="false"
+                  {%- endif -%}>
+                <input name="options[prefix]" type="hidden" value="last">
+                <button
+                  type="submit"
+                  class="search__button field__button"
+                  aria-label="{{ 'general.search.search' | t }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                    <path d="M18.6633 16.8367L14.9531 13.125C16.0656 11.6754 16.5849 9.85687 16.4059 8.03839C16.2268 6.21991 15.3628 4.53763 13.989 3.3328C12.6152 2.12798 10.8345 1.49082 9.00822 1.55059C7.18193 1.61036 5.44675 2.36258 4.15467 3.65466C2.8626 4.94673 2.11038 6.68191 2.05061 8.50821C1.99084 10.3345 2.62799 12.1151 3.83282 13.4889C5.03765 14.8627 6.71993 15.7268 8.53841 15.9059C10.3569 16.0849 12.1754 15.5655 13.625 14.4531L17.3383 18.1672C17.4255 18.2544 17.529 18.3236 17.643 18.3708C17.7569 18.418 17.879 18.4423 18.0024 18.4423C18.1257 18.4423 18.2478 18.418 18.3617 18.3708C18.4757 18.3236 18.5792 18.2544 18.6664 18.1672C18.7536 18.08 18.8228 17.9765 18.87 17.8625C18.9172 17.7486 18.9415 17.6265 18.9415 17.5031C18.9415 17.3798 18.9172 17.2577 18.87 17.1437C18.8228 17.0298 18.7536 16.9263 18.6664 16.8391L18.6633 16.8367ZM3.93752 8.75C3.93752 7.69929 4.24909 6.67217 4.83283 5.79853C5.41658 4.9249 6.24628 4.24398 7.21701 3.84189C8.18774 3.4398 9.25591 3.33459 10.2864 3.53958C11.317 3.74456 12.2636 4.25053 13.0065 4.9935C13.7495 5.73646 14.2555 6.68306 14.4604 7.71358C14.6654 8.74411 14.5602 9.81227 14.1581 10.783C13.756 11.7537 13.0751 12.5834 12.2015 13.1672C11.3278 13.7509 10.3007 14.0625 9.25002 14.0625C7.8415 14.0611 6.49108 13.5009 5.49511 12.5049C4.49914 11.5089 3.93896 10.1585 3.93752 8.75Z" fill="#9A9A9A"/>
+                  </svg>
+                </button>
+
+                <!-- Add Search Results Panel -->
+                <div class="search-results-panel" id="headerSearchResultsPanel">
+                  <div class="search-results-content">
+                    <div class="search-results-header">
+                      <h3 class="search-results-title">Search Results</h3>
+                      <button type="button" class="search-results-close" id="closeHeaderSearchPanel">&times;</button>
+                    </div>
+                    <div class="search-results-body" id="headerSearchResultsBody">
+                      <!-- Results will be populated here -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
+        <div class="desktop-localization-wrapper">
+          {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+            <localization-form class="small-hide medium-hide" data-prevent-hide>
+              {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+                <div>
+                  <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                  {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
+                </div>
+              {%- endform -%}
+            </localization-form>
+          {% endif %}
+
+          {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+            <localization-form class="small-hide medium-hide" data-prevent-hide>
+              {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+                <div>
+                  <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                  {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
+                </div>
+              {%- endform -%}
+            </localization-form>
+          {%- endif -%}
+        </div>
+
+        <!-- Phone Number -->
+        {%- if section.settings.phone_number != blank -%}
+          <div class="header__phone small-hide medium-hide">
+            <a href="tel:{{ section.settings.phone_number | replace: ' ', '' | replace: '-', '' | replace: '(', '' | replace: ')', '' }}" class="header__phone-link">
+              <span class="header__phone-icon">
+                {% comment %} <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" fill="currentColor"/>
+                </svg> {% endcomment %}
+              </span>
+              <span class="header__phone-text">{{ section.settings.phone_number }}</span>
+            </a>
+          </div>
+        {%- endif -%}
+
+        {%- if shop.customer_accounts_enabled -%}
+          <a
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="header__icon justify-center header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}"
+            rel="nofollow"
+          >
+            {%- if section.settings.enable_customer_avatar -%}
+              <account-icon>
+                {%- if customer and customer.has_avatar? -%}
+                  {{ customer | avatar }}
+                {%- else -%}
+                  <span class="svg-wrapper">
+                    <img
+                      src="{{ 'User.png' | asset_url }}"
+                      alt="User avatar"
+                      loading="lazy"
+                      width="20"
+                      height="20">  
+                  </span>
+                {%- endif -%}
+              </account-icon>
+            {%- else -%}
+              <span class="svg-wrapper">
+                <img
+                  src="{{ 'User.png' | asset_url }}"
+                  alt="User avatar"
+                  loading="lazy"
+                  width="20"
+                  height="20"> 
+              </span>
+            {%- endif -%}
+            <span class="visually-hidden">
+              {%- liquid
+                if customer
+                  echo 'customer.account_fallback' | t
+                else
+                  echo 'customer.log_in' | t
+                endif
+              -%}
+            </span>
+          </a>
+        {%- endif -%}
+
+        <!-- Add Wishlist Icon -->
+        <span class="header__icon link focus-inset header__icon--wishlist" id="wishlist-icon-bubble"
+          aria-label="Open wishlist sidebar"
+          onclick="openWishlistSidebar()">
+          <span class="svg-wrapper">
+            <img
+              src="{{ 'Vector.png' | asset_url }}"
+              alt="Vector avatar"
+              loading="lazy"
+              width="18"
+              height="18"> 
+            <span class="exist_wishlist"></span>
+          </span>
+        </span>
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              {% render block %}
+          {%- endcase -%}
+        {%- endfor -%}
+
+        <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart link focus-inset" id="cart-icon-bubble">
+          {% if cart == empty %}
+            <span class="svg-wrapper">
+              <img
+                src="{{ 'ShoppingBag.png' | asset_url }}"
+                alt="ShoppingBag avatar"
+                loading="lazy"
+                width="20"
+                height="20"> 
+            </span>
+          {% else %}
+            <span class="svg-wrapper">
+              <img
+                src="{{ 'ShoppingBag.png' | asset_url }}"
+                alt="ShoppingBag avatar"
+                loading="lazy"
+                width="20"
+                height="20">
+            </span>
+          {% endif %}
+          <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+          {%- if cart != empty -%}
+            <div class="cart-count-bubble">
+              {%- if cart.item_count < 100 -%}
+                <span aria-hidden="true">{{ cart.item_count }}</span>
+              {%- endif -%}
+              <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+            </div>
+          {%- endif -%}
+        </a>
+      </div>
+    </div>
+  </header>
+{% comment %} </{{ header_tag }}> {% endcomment %}
+ </div>
+
+<!-- Add Wishlist Sidebar -->
+<div id="wishlist-sidebar" class="wishlist-sidebar">
+  <div class="wishlist-sidebar-header">
+    <span>My Wishlist</span>
+    <span onclick="closeWishlistSidebar()" aria-label="Close wishlist sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </span>
+  </div>
+  <div class="wishlist-sidebar-content">
+    <!-- Wishlist items will be displayed here -->
+  </div>
+</div>
+
+{%- if settings.cart_type == 'notification' -%}
+  {%- render 'cart-notification',
+    color_scheme: section.settings.color_scheme,
+    desktop_menu_type: section.settings.menu_type_desktop
+  -%}
+{%- endif -%}
+
+{% javascript %}
+  class StickyHeader extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      this.header = document.querySelector('.section-header');
+      this.headerIsAlwaysSticky =
+        this.getAttribute('data-sticky-type') === 'always' ||
+        this.getAttribute('data-sticky-type') === 'reduce-logo-size';
+      this.headerBounds = {};
+
+      this.setHeaderHeight();
+
+      window.matchMedia('(max-width: 990px)').addEventListener('change', this.setHeaderHeight.bind(this));
+
+      if (this.headerIsAlwaysSticky) {
+        this.header.classList.add('shopify-section-header-sticky');
+      }
+
+      this.currentScrollTop = 0;
+      this.preventReveal = false;
+      this.predictiveSearch = this.querySelector('predictive-search');
+
+      this.onScrollHandler = this.onScroll.bind(this);
+      this.hideHeaderOnScrollUp = () => (this.preventReveal = true);
+
+      this.addEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
+      window.addEventListener('scroll', this.onScrollHandler, false);
+
+      this.createObserver();
+    }
+
+    setHeaderHeight() {
+      document.documentElement.style.setProperty('--header-height', `${this.header.offsetHeight}px`);
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('preventHeaderReveal', this.hideHeaderOnScrollUp);
+      window.removeEventListener('scroll', this.onScrollHandler);
+    }
+
+    createObserver() {
+      let observer = new IntersectionObserver((entries, observer) => {
+        this.headerBounds = entries[0].intersectionRect;
+        observer.disconnect();
+      });
+
+      observer.observe(this.header);
+    }
+
+    onScroll() {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+      if (this.predictiveSearch && this.predictiveSearch.isOpen) return;
+
+      if (scrollTop > this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        this.header.classList.add('scrolled-past-header');
+        if (this.preventHide) return;
+        requestAnimationFrame(this.hide.bind(this));
+      } else if (scrollTop < this.currentScrollTop && scrollTop > this.headerBounds.bottom) {
+        this.header.classList.add('scrolled-past-header');
+        if (!this.preventReveal) {
+          requestAnimationFrame(this.reveal.bind(this));
+        } else {
+          window.clearTimeout(this.isScrolling);
+
+          this.isScrolling = setTimeout(() => {
+            this.preventReveal = false;
+          }, 66);
+
+          requestAnimationFrame(this.hide.bind(this));
+        }
+      } else if (scrollTop <= this.headerBounds.top) {
+        this.header.classList.remove('scrolled-past-header');
+        requestAnimationFrame(this.reset.bind(this));
+      }
+
+      this.currentScrollTop = scrollTop;
+    }
+
+    hide() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.add('shopify-section-header-hidden', 'shopify-section-header-sticky');
+      this.closeMenuDisclosure();
+      this.closeSearchModal();
+    }
+
+    reveal() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.add('shopify-section-header-sticky', 'animate');
+      this.header.classList.remove('shopify-section-header-hidden');
+    }
+
+    reset() {
+      if (this.headerIsAlwaysSticky) return;
+      this.header.classList.remove('shopify-section-header-hidden', 'shopify-section-header-sticky', 'animate');
+    }
+
+    closeMenuDisclosure() {
+      this.disclosures = this.disclosures || this.header.querySelectorAll('header-menu');
+      this.disclosures.forEach((disclosure) => disclosure.close());
+    }
+
+    closeSearchModal() {
+      this.searchModal = this.searchModal || this.header.querySelector('details-modal');
+      this.searchModal.close(false);
+    }
+  }
+
+  customElements.define('sticky-header', StickyHeader);
+{% endjavascript %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if settings.logo %}
+      "logo": {{ settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tiktok_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ request.origin | append: page.url | json }}
+  }
+</script>
+
+<script>
+  // HeaderDrawer class is already defined in global.js - no need to redefine it here
+</script>
+
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = request.origin | append: routes.search_url | append: '?q={search_term_string}' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "select",
+      "id": "logo_position",
+      "options": [
+        {
+          "value": "top-left",
+          "label": "t:sections.header.settings.logo_position.options__2.label"
+        },
+        {
+          "value": "top-center",
+          "label": "t:sections.header.settings.logo_position.options__3.label"
+        },
+        {
+          "value": "middle-left",
+          "label": "t:sections.header.settings.logo_position.options__1.label"
+        },
+        {
+          "value": "middle-center",
+          "label": "t:sections.header.settings.logo_position.options__4.label"
+        }
+      ],
+      "default": "middle-left",
+      "label": "t:sections.header.settings.logo_position.label",
+      "info": "t:sections.header.settings.logo_help.content"
+    },
+    {
+      "type": "select",
+      "id": "mobile_logo_position",
+      "options": [
+        {
+          "value": "center",
+          "label": "t:sections.header.settings.mobile_logo_position.options__1.label"
+        },
+        {
+          "value": "left",
+          "label": "t:sections.header.settings.mobile_logo_position.options__2.label"
+        }
+      ],
+      "default": "center",
+      "label": "t:sections.header.settings.mobile_logo_position.label"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "select",
+      "id": "menu_type_desktop",
+      "options": [
+        {
+          "value": "dropdown",
+          "label": "t:sections.header.settings.menu_type_desktop.options__1.label"
+        },
+        {
+          "value": "mega",
+          "label": "t:sections.header.settings.menu_type_desktop.options__2.label"
+        },
+        {
+          "value": "drawer",
+          "label": "t:sections.header.settings.menu_type_desktop.options__3.label"
+        }
+      ],
+      "default": "dropdown",
+      "label": "t:sections.header.settings.menu_type_desktop.label"
+    },
+    {
+      "type": "select",
+      "id": "sticky_header_type",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.header.settings.sticky_header_type.options__1.label"
+        },
+        {
+          "value": "on-scroll-up",
+          "label": "t:sections.header.settings.sticky_header_type.options__2.label"
+        },
+        {
+          "value": "always",
+          "label": "t:sections.header.settings.sticky_header_type.options__3.label"
+        },
+        {
+          "value": "reduce-logo-size",
+          "label": "t:sections.header.settings.sticky_header_type.options__4.label"
+        }
+      ],
+      "default": "on-scroll-up",
+      "label": "t:sections.header.settings.sticky_header_type.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line_separator",
+      "default": true,
+      "label": "t:sections.header.settings.show_line_separator.label"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone Number",
+      "info": "Add your business phone number. It will be displayed in the header and clicking it will open the phone app.",
+      "default": "(310) 870-3227"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.header__1.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "menu_color_scheme",
+      "label": "t:sections.header.settings.menu_color_scheme.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.header__utilities.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "t:sections.header.settings.enable_country_selector.label",
+      "info": "t:sections.header.settings.enable_country_selector.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "t:sections.header.settings.enable_language_selector.label",
+      "info": "t:sections.header.settings.enable_language_selector.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_customer_avatar",
+      "default": true,
+      "label": "t:sections.header.settings.enable_customer_avatar.label",
+      "info": "t:sections.header.settings.enable_customer_avatar.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.header.settings.margin_bottom.label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 36,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  function openWishlistSidebar() {
+    document.getElementById('wishlist-sidebar').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeWishlistSidebar() {
+    document.getElementById('wishlist-sidebar').classList.remove('active');
+    document.body.style.overflow = 'auto';
+  }
+
+  // Close sidebar when clicking outside
+  document.addEventListener('click', function(event) {
+    const sidebar = document.getElementById('wishlist-sidebar');
+    const icon = document.getElementById('wishlist-icon-bubble');
+    if (!sidebar.contains(event.target) && !icon.contains(event.target) && sidebar.classList.contains('active')) {
+      closeWishlistSidebar();
+    }
+
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const existWishlistElements = document.querySelectorAll('.exist_wishlist');
+    
+    existWishlistElements.forEach(element => {
+      if (wishlist.length > 0) {
+        element.style.display = 'block';
+      } else {
+        element.style.display = 'none';
+      }
+    });
+  });
+</script>
+
+<!-- Add Header Search Script -->
+<script>
+  // Debounce function implementation
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get header search panel elements
+    const headerSearchPanel = document.getElementById('headerSearchResultsPanel');
+    const headerSearchResultsBody = document.getElementById('headerSearchResultsBody');
+    const closeHeaderButton = document.getElementById('closeHeaderSearchPanel');
+    const headerSearchInput = document.getElementById('Header-Search-Input');
+    
+    // Function to open header search panel
+    function openHeaderSearchPanel() {
+      headerSearchPanel.classList.add('active');
+    }
+    
+    // Function to close header search panel
+    function closeHeaderSearchPanel() {
+      headerSearchPanel.classList.remove('active');
+    }
+    
+    // Function to show loading state
+    function showHeaderLoading() {
+      headerSearchResultsBody.innerHTML = `
+        <div class="search-loading">
+          <div class="loading-spinner"></div>
+          <p>Searching for products...</p>
+        </div>
+      `;
+    }
+    
+    // Function to show no results
+    function showHeaderNoResults(searchTerm) {
+      headerSearchResultsBody.innerHTML = `
+        <div class="search-no-results">
+          <h3>No results found</h3>
+          <p>Sorry, we couldn't find any products matching "${searchTerm}"</p>
+          <p>Try searching with different keywords.</p>
+        </div>
+      `;
+    }
+    
+    // Function to perform header search
+    async function performHeaderSearch(searchTerm) {
+      try {
+        showHeaderLoading();
+        openHeaderSearchPanel();
+        
+        // Fetch search results from Shopify search API
+        const response = await fetch(`/search/suggest.json?q=${encodeURIComponent(searchTerm)}&resources[type]=product&resources[limit]=20`);
+        
+        if (!response.ok) {
+          throw new Error('Search failed');
+        }
+        
+        const data = await response.json();
+        const products = data.resources.results.products || [];
+        
+        // Create document fragment for better performance
+        const fragment = document.createDocumentFragment();
+        const resultsGrid = document.createElement('div');
+        resultsGrid.className = 'search-results-grid';
+        
+        products.forEach(product => {
+          const productElement = document.createElement('a');
+          productElement.href = product.url;
+          productElement.className = 'search-result-item';
+          productElement.innerHTML = `
+            <img src="${product.featured_image?.url || '/cdn/shop/files/placeholder.jpg'}" 
+                 alt="${product.title}" 
+                 class="search-result-image" 
+                 loading="lazy">
+            <h3 class="search-result-title">${product.title.length > 25 ? product.title.substring(0, 25) + '...' : product.title}</h3>
+          `;
+          resultsGrid.appendChild(productElement);
+        });
+        
+        fragment.appendChild(resultsGrid);
+        headerSearchResultsBody.innerHTML = '';
+        headerSearchResultsBody.appendChild(fragment);
+        
+        if (products.length === 0) {
+          showHeaderNoResults(searchTerm);
+        }
+        
+      } catch (error) {
+        console.error('Search error:', error);
+        headerSearchResultsBody.innerHTML = `
+          <div class="search-error">
+            <h3>Search Error</h3>
+            <p>There was an error performing the search. Please try again.</p>
+          </div>
+        `;
+      }
+    }
+    
+    // Initialize search with debouncing
+    const debouncedHeaderSearch = debounce((searchTerm) => {
+      if (searchTerm.length >= 2) {
+        performHeaderSearch(searchTerm);
+      } else {
+        closeHeaderSearchPanel();
+      }
+    }, 300);
+    
+    // Add event listeners to header search input
+    if (headerSearchInput) {
+      // Show search panel as user types
+      headerSearchInput.addEventListener('input', function(e) {
+        const searchTerm = e.target.value.trim();
+        debouncedHeaderSearch(searchTerm);
+      });
+      
+      // Redirect to search page on Enter key
+      headerSearchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+          e.preventDefault();
+          const searchTerm = e.target.value.trim();
+          
+          if (searchTerm.length > 0) {
+            closeHeaderSearchPanel();
+            window.location.href = `/search?type=product&q=${encodeURIComponent(searchTerm)}`;
+          }
+        }
+      });
+      
+      // Close panel when input loses focus (with delay to allow clicks)
+      headerSearchInput.addEventListener('blur', function() {
+        setTimeout(() => {
+          if (!headerSearchPanel.matches(':hover')) {
+            closeHeaderSearchPanel();
+          }
+        }, 200);
+      });
+    }
+    
+    // Close panel when close button is clicked
+    if (closeHeaderButton) {
+      closeHeaderButton.addEventListener('click', closeHeaderSearchPanel);
+    }
+    
+    // Close panel when clicking outside
+    document.addEventListener('click', function(e) {
+      if (headerSearchPanel && !headerSearchPanel.contains(e.target) && !headerSearchInput.contains(e.target)) {
+        closeHeaderSearchPanel();
+      }
+    });
+    
+    // Close panel when pressing Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && headerSearchPanel && headerSearchPanel.classList.contains('active')) {
+        closeHeaderSearchPanel();
+      }
+    });
+  });
+</script>
+
+<script>
+  // Add this JavaScript to replace the menu button icon
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuButtons = document.querySelectorAll('.header__icon--menu');
+    menuButtons.forEach(button => {
+      button.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M21.375 12C21.375 12.2984 21.2565 12.5845 21.0455 12.7955C20.8345 13.0065 20.5484 13.125 20.25 13.125H3.75C3.45163 13.125 3.16548 13.0065 2.9545 12.7955C2.74353 12.5845 2.625 12.2984 2.625 12C2.625 11.7016 2.74353 11.4155 2.9545 11.2045C3.16548 10.9935 3.45163 10.875 3.75 10.875H20.25C20.5484 10.875 20.8345 10.9935 21.0455 11.2045C21.2565 11.4155 21.375 11.7016 21.375 12ZM3.75 7.125H20.25C20.5484 7.125 20.8345 7.00647 21.0455 6.7955C21.2565 6.58452 21.375 6.29837 21.375 6C21.375 5.70163 21.2565 5.41548 21.0455 5.2045C20.8345 4.99353 20.5484 4.875 20.25 4.875H3.75C3.45163 4.875 3.16548 4.99353 2.9545 5.2045C2.74353 5.41548 2.625 5.70163 2.625 6C2.625 6.29837 2.74353 6.58452 2.9545 6.7955C3.16548 7.00647 3.45163 7.125 3.75 7.125ZM20.25 16.875H3.75C3.45163 16.875 3.16548 16.9935 2.9545 17.2045C2.74353 17.4155 2.625 17.7016 2.625 18C2.625 18.2984 2.74353 18.5845 2.9545 18.7955C3.16548 19.0065 3.45163 19.125 3.75 19.125H20.25C20.5484 19.125 20.8345 19.0065 21.0455 18.7955C21.2565 18.5845 21.375 18.2984 21.375 18C21.375 17.7016 21.2565 17.4155 21.0455 17.2045C20.8345 16.9935 20.5484 16.875 20.25 16.875Z" fill="black"/>
+        </svg>
+      `;
+    });
+  });
+</script>

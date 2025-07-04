@@ -1,0 +1,115 @@
+{% comment %}
+  Custom Menu Drawer
+  
+  Renders a custom navigation drawer with logo and menu items
+{% endcomment %}
+
+
+<!-- Custom Drawer Structure -->
+<div id="custom-drawer-overlay" class="custom-drawer-overlay"></div>
+<div id="custom-drawer" class="custom-drawer">
+  <div class="custom-drawer-header">
+    <!-- Logo from header -->
+    <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset justify-center ml-10">
+      {%- if settings.logo != blank -%}
+        <div class="header__heading-logo-wrapper">
+          {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+          {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+          {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+          {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+          {{
+            settings.logo
+            | image_url: width: 600
+            | image_tag:
+              class: 'header__heading-logo motion-reduce',
+              widths: widths,
+              height: logo_height,
+              width: settings.logo_width,
+              alt: logo_alt,
+              sizes: sizes,
+              preload: true
+          }}
+        </div>
+      {%- else -%}
+        <span class="justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="115" height="15" viewBox="0 0 129 18" fill="none">
+            <path d="M112.616 17.75L119.831 0.25H121.835L129 17.75H125.894L124.566 14.375H117.025L115.673 17.75H112.616ZM118.027 11.875H123.564L120.808 4.9L118.027 11.875Z" fill="black"/>
+            <path d="M103.442 18C100.662 18 98.8328 17 97.3047 15.05L99.2587 13.1C100.236 14.5 101.463 15.325 103.543 15.325C105.472 15.325 106.724 14.475 106.724 13.075C106.724 8.975 98.407 11.125 98.407 4.875C98.407 1.8 100.912 0 104.144 0C106.449 0 108.302 1 109.455 2.4L107.501 4.35C106.499 3.225 105.472 2.675 104.069 2.675C102.315 2.675 101.288 3.4 101.288 4.675C101.288 8.375 109.605 6.4 109.605 12.9C109.605 16.05 107.225 18 103.442 18Z" fill="black"/>
+            <path d="M85.1706 18C80.1853 18 76.2021 13.975 76.2021 8.975C76.2021 3.975 80.1352 0 85.1205 0C90.1057 0 94.0639 3.975 94.0639 9C94.0639 14 90.1308 18 85.1706 18ZM85.1205 15.25C88.6527 15.25 91.1078 12.675 91.1078 8.975C91.1078 5.325 88.6277 2.75 85.1205 2.75C81.6133 2.75 79.1582 5.3 79.1582 8.975C79.1582 12.675 81.6133 15.25 85.1205 15.25Z" fill="black"/>
+            <path d="M54.0115 17.75V0.25H56.0156L62.6543 11.15L69.2929 0.25H71.2971V17.75H68.4161V6.55L63.6563 14.35H61.6522L56.8924 6.55V17.75H54.0115Z" fill="black"/>
+            <path d="M36.6193 17.75V0.25H43.1828C46.4896 0.25 48.7192 2.4 48.7192 5.3C48.7192 8.175 46.7401 10.1 43.7089 10.3L49.8716 17.75H46.2391L40.2518 10.325H39.5002V17.75H36.6193ZM43.0575 2.75H39.5002V7.95H43.0325C44.8111 7.95 45.8383 6.975 45.8383 5.35C45.8383 3.9 44.8111 2.75 43.0575 2.75Z" fill="black"/>
+            <path d="M19.8386 17.75V0.25H31.5127V2.875H22.7196V7.55H30.7862V10.075H22.7196V15.125H31.6379V17.75H19.8386Z" fill="black"/>
+            <path d="M0 17.75V0.25H2.88093V7.375H11.1479V0.25H14.0289V17.75H11.1479V10H2.88093V17.75H0Z" fill="black"/>
+          </svg>
+        </span>
+      {%- endif -%}
+    </a>
+    
+    <!-- Close button -->
+    <button class="custom-drawer-close" id="custom-drawer-close" aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M8 8.9264L1.13575 15.7906C1.01363 15.9128 0.863591 15.9782 0.685639 15.9869C0.507687 15.9956 0.348926 15.9302 0.209355 15.7906C0.069785 15.6511 0 15.4967 0 15.3274C0 15.1582 0.069785 15.0038 0.209355 14.8642L7.0736 8L0.209355 1.13575C0.0872313 1.01363 0.0218075 0.863591 0.0130844 0.685639C0.00436125 0.507687 0.069785 0.348926 0.209355 0.209355C0.348926 0.069785 0.503326 0 0.672555 0C0.841784 0 0.996184 0.069785 1.13575 0.209355L8 7.0736L14.8642 0.209355C14.9864 0.0872313 15.1368 0.0218075 15.3157 0.0130844C15.4927 0.00436125 15.6511 0.069785 15.7906 0.209355C15.9302 0.348926 16 0.503326 16 0.672555C16 0.841784 15.9302 0.996184 15.7906 1.13575L8.9264 8L15.7906 14.8642C15.9128 14.9864 15.9782 15.1368 15.9869 15.3157C15.9956 15.4927 15.9302 15.6511 15.7906 15.7906C15.6511 15.9302 15.4967 16 15.3274 16C15.1582 16 15.0038 15.9302 14.8642 15.7906L8 8.9264Z" fill="#3A3A3A"/>
+      </svg>
+    </button>
+  </div>
+  
+  <div class="custom-drawer-content">
+    <nav class="custom-drawer-navigation">
+      {%- for link in linklists.main-menu.links -%}
+        <a href="{{ link.url }}" class="custom-drawer-menu-item {% if link.active %}active{% endif %}">
+          {{ link.title }}
+        </a>
+      {%- endfor -%}
+    </nav>
+  </div>
+</div>
+
+<script>
+// Custom Drawer JavaScript
+document.addEventListener('DOMContentLoaded', function() {
+  const menuToggle = document.getElementById('custom-menu-toggle');
+  const drawer = document.getElementById('custom-drawer');
+  const drawerOverlay = document.getElementById('custom-drawer-overlay');
+  const drawerClose = document.getElementById('custom-drawer-close');
+  
+  // Open drawer function
+  function openDrawer() {
+    drawer.classList.add('active');
+    drawerOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent body scroll
+  }
+  
+  // Close drawer function  
+  function closeDrawer() {
+    drawer.classList.remove('active');
+    drawerOverlay.classList.remove('active');
+    document.body.style.overflow = ''; // Restore body scroll
+  }
+  
+  // Event listeners
+  if (menuToggle) {
+    menuToggle.addEventListener('click', openDrawer);
+  }
+  
+  if (drawerClose) {
+    drawerClose.addEventListener('click', closeDrawer);
+  }
+  
+  if (drawerOverlay) {
+    drawerOverlay.addEventListener('click', closeDrawer);
+  }
+  
+  // Close drawer on escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && drawer.classList.contains('active')) {
+      closeDrawer();
+    }
+  });
+  
+  // Close drawer when clicking menu links
+  const menuItems = document.querySelectorAll('.custom-drawer-menu-item');
+  menuItems.forEach(item => {
+    item.addEventListener('click', closeDrawer);
+  });
+});
+</script>

@@ -1,0 +1,34 @@
+{{ 'page-custom-your-privacy.css' | asset_url | stylesheet_tag }}
+
+<div class="custom-your-privacy-page">
+  <div class="contact_us_banner">
+    <div class="instant-slider i0n7f4x54iS9Ge1Wd">
+      <div class="instant-slider-wrapper">
+        <div class="contact_us_banner_image">
+          <img
+            src="{{ 'contact_us_banner.webp' | asset_url }}"
+            class="instant-fill instant-image__fill"
+            style="object-fit:cover"
+            decoding="async"
+            loading="eager"
+            fetchpriority="high"
+            width="100%"
+            height="100%">
+          <div class="contact_us_banner_text">
+            <span class="contact_us_banner_content">{{ page.title }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-content">
+    <div class="contact-info">
+      <div class="contact-section">
+        <div class="contact-section-header">
+          <p>{{ page.content }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,173 @@
+<category-filter class="main_container category-filter">
+  <div class="category-filter__wrapper">
+    <h2 class="category-filter__heading">{{ section.settings.title }}</h2>
+
+    <ul class="category-filter__list">
+      <li class="category-filter__item">
+        <p class="category-filter__button is-active" data-category="all">
+          New Arrivals
+        </p>
+      </li>
+      {%- for collection in collections -%}
+        <li class="category-filter__item">
+          <p class="category-filter__button{% if collection.url == request.path %} is-active{% endif %}" data-category="{{ collection.handle }}">
+            {{ collection.title }}
+          </p>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</category-filter>
+
+<style>
+  .category-filter {
+    margin: 2rem auto;
+  }
+
+  .category-filter__wrapper {
+    padding: 2rem 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .category-filter__heading {
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .category-filter__list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 3rem;
+    justify-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .category-filter__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-filter__list.is-dragging {
+    cursor: grabbing;
+    scroll-behavior: auto;
+  }
+
+  .category-filter__list.is-dragging * {
+    pointer-events: none;
+  }
+
+  .category-filter__item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .category-filter__button {
+    text-align: center;
+    font-family: Gabarito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+
+  .category-filter__button:hover,
+  .category-filter__button.is-active {
+    font-style: bold;
+    border-bottom: 1px solid;
+  }
+
+  .category-filter__count {
+    font-size: 0.9em;
+    opacity: 0.7;
+  }
+
+  @media screen and (max-width: 749px) {
+    .category-filter__list {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .category-filter__button {
+      text-align: left;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  class CategoryFilter extends HTMLElement {
+    constructor() {
+      super();
+      this.init();
+    }
+
+    init() {
+      this.buttons = this.querySelectorAll('.category-filter__button');
+      this.buttons.forEach(button => {
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          const category = button.getAttribute('data-category');
+          this.filterCategory(category);
+        });
+      });
+    }
+
+    filterCategory(category) {
+      // Remove active class from all buttons
+      this.buttons.forEach(btn => btn.classList.remove('is-active'));
+      
+      // Add active class to clicked button
+      const activeButton = Array.from(this.buttons).find(btn => 
+        btn.getAttribute('data-category') === category
+      );
+      if (activeButton) {
+        activeButton.classList.add('is-active');
+      }
+
+      // Navigate to the appropriate URL
+      if (category === 'all') {
+        window.location.href = '{{ routes.all_products_collection_url }}';
+      } else {
+        window.location.href = '/collections/' + category;
+      }
+    }
+  }
+
+  if (!customElements.get('category-filter')) {
+    customElements.define('category-filter', CategoryFilter);
+  }
+</script>
+
+{{ 'category-filter.js' | asset_url | script_tag }}
+
+{% schema %}
+  {
+    "name": "Category Filter",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Shop by Category"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Category Filter"
+      }
+    ]
+  }
+{% endschema %}

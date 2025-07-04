@@ -1,0 +1,236 @@
+.custom-your-privacy-page {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.contact-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-header h1 {
+  font-size: 2.5em;
+  color: #000;
+  margin: 0;
+}
+
+.contact-content {
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px auto;
+  gap: 40px;
+  padding-top: 40px;
+}
+
+.contact-info {
+  padding: 30px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-section h2 {
+  font-size: 1.5em;
+  margin-bottom: 25px;
+  color: #000;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.info-item svg {
+  margin-right: 5px;
+  min-width: 24px;
+  color: #000;
+}
+
+.info-item p {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.contact-form {
+  padding: 30px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+}
+
+.contact-form h2 {
+  font-size: 1.5em;
+  margin-bottom: 25px;
+  color: #000;
+}
+
+.form-fields {
+  display: grid;
+  gap: 20px;
+}
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.form-field textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.submit-button {
+  background-color: #000;
+  color: #fff;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #333;
+}
+
+.form-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.form-error {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .custom-contact-page {
+    padding: 20px;
+  }
+  
+  .contact-header h1 {
+    font-size: 2em;
+  }
+} 
+.contact_us_banner_image img{
+  max-height: 500px;
+}
+
+.contact_us_banner_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact_us_banner_title {
+  color: var(--Black, #000);
+  text-align: center;
+  font-family: Gabarito;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 136%;
+  letter-spacing: 0.36px;
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.5px var(--Black, #000);
+}
+
+.contact_us_banner_content {
+  color: var(--Black, #000);
+  text-align: center;
+  font-family: Gabarito;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 114%; 
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.5px var(--Black, #000);
+}
+
+.contact-section-header h2 {
+  color: #000;
+  font-family: Gabarito;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  letter-spacing: 0.64px;
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.5px var(--Black, #000);
+}
+
+.contact-section-header p {
+  color: var(--Black, #000);
+  font-family: "Switzer Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: 0.16px;
+}
+.contact-section-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  gap: 5px;
+}
+
+.contact-section-item > .info-item > span {
+  color: #000;
+  text-align: center;
+  font-family: Gabarito;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 136%;
+  letter-spacing: 0.56px;
+  text-transform: uppercase;  
+  -webkit-text-stroke: 0.5px var(--Black, #000);
+}
+
+.contact-section-item > span {
+  color: var(--400, #9A9A9A);
+  font-family: "Switzer Variable";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: 0.16px;
+}
+
+.contact-form h2 {
+  color: #000;
+  font-family: Gabarito;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+  -webkit-text-stroke: 0.5px var(--Black, #000);
+}

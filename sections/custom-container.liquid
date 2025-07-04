@@ -1,0 +1,26 @@
+<div class="cart-container" style="display: none; background-color: {{ section.settings.background_color }}; padding: {{ section.settings.padding }}; border-radius: {{ section.settings.border_radius }};">
+{% schema %}
+{
+  "name": "Cart Container",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "text",
+      "id": "padding",
+      "label": "Padding",
+      "default": "30px"
+    },
+    {
+      "type": "text",
+      "id": "border_radius",
+      "label": "Border Radius",
+      "default": "10px"
+    }
+  ]
+}
+{% endschema %}
