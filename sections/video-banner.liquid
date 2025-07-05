@@ -1,0 +1,161 @@
+{{ 'video-banner.css' | asset_url | stylesheet_tag }}
+
+<section
+  class="video-banner"
+  style="--padding-top: {{ section.settings.padding_top }}px; --padding-bottom: {{ section.settings.padding_bottom }}px; --max-width: {{ section.settings.max_width }}px;"
+  aria-labelledby="{%- if section.settings.title != blank -%}video-banner-heading-{{ section.id }}{%- else -%}video-banner-{{ section.id }}{%- endif -%}"
+  role="region"
+>
+  <div class="video-banner__container">
+    {%- if section.settings.title != blank -%}
+      <header class="video-banner__content">
+        <div class="video-banner__content-inner">
+          <h2
+            class="video-banner__heading {{ section.settings.heading_size }}"
+            id="video-banner-heading-{{ section.id }}"
+          >
+            {{ section.settings.title }}
+          </h2>
+        </div>
+      </header>
+    {%- endif -%}
+
+    <div class="video-banner__media" role="main">
+      {%- if section.settings.video_url != blank -%}
+        {%- liquid
+          assign video_id = section.settings.video_url | split: 'v=' | last | split: '&' | first
+          if section.settings.video_url contains 'youtu.be'
+            assign video_id = section.settings.video_url | split: '/' | last
+          endif
+        -%}
+        <div class="video-banner__video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/{{ video_id }}?autoplay={{ section.settings.autoplay | default: 0 }}&mute=1&loop=0&controls=1&rel=0&modestbranding=1"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+            class="video-banner__iframe"
+            loading="lazy"
+            title="{%- if section.settings.title != blank -%}{{ section.settings.title | escape }}{%- else -%}Featured Video{%- endif -%}"
+            aria-label="YouTube video player"
+          >
+          </iframe>
+          <noscript>
+            <p>
+              This content requires JavaScript to be enabled. Please enable JavaScript in your browser to view this
+              video.
+            </p>
+          </noscript>
+        </div>
+      {%- else -%}
+        <div class="video-banner__video-wrapper">
+          <iframe
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&loop=0&controls=1&rel=0&modestbranding=1"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+            class="video-banner__iframe"
+            loading="lazy"
+            title="Sample Video"
+            aria-label="YouTube video player - sample content"
+          >
+          </iframe>
+          <noscript>
+            <p>
+              This content requires JavaScript to be enabled. Please enable JavaScript in your browser to view this
+              video.
+            </p>
+          </noscript>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- unless section.settings.title != blank -%}
+  <span class="visually-hidden" id="video-banner-{{ section.id }}">Video Banner Section</span>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Video Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "YouTube video URL"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Video Banner Title"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h3",
+          "label": "Small"
+        },
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        }
+      ],
+      "default": "h2",
+      "label": "Heading size"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "default": false,
+      "label": "Autoplay video"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 800,
+      "max": 1920,
+      "step": 40,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1200,
+      "info": "Controls the maximum width of the video banner"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video Banner"
+    }
+  ]
+}
+{% endschema %}
