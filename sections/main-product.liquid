@@ -37,7 +37,7 @@
         width: 30px;
         height: 30px;
       }
-      
+
       /* Ensure image container has proper dimensions on mobile */
       #picture-container {
         min-height: 200px;
@@ -46,13 +46,13 @@
         align-items: center;
         justify-content: center;
       }
-      
+
       #product-main-image {
         max-width: 100%;
         height: 100%;
         transition: opacity 0.3s ease;
       }
-      
+
       /* Improve touch targets for mobile */
       .ar_filter_options .option {
         min-height: 44px;
@@ -60,7 +60,7 @@
         margin: 4px;
         touch-action: manipulation;
       }
-      
+
       /* Prevent zoom on double tap for configurator options */
       .ar_filter_options {
         touch-action: manipulation;
@@ -79,13 +79,19 @@
 
     /* Loading spinner animation for add to cart button */
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
 
-  {% comment %} <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
-  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script> {% endcomment %}
+  {% comment %}
+    <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  {% endcomment %}
   <script type="module" src="{{ '3d-configurator.js' | asset_url }}"></script>
 
   <div class="product_detail">
@@ -311,36 +317,37 @@
               </button>
             </form>
           </div>
+          {% render 'feature-highlights', product: product %}
         </div>
       </div>
     </div>
 
     <script>
-       (function () {
-          const productTitle = {{ product.title | json }};
+      (function () {
+         const productTitle = {{ product.title | json }};
 
-          // fetch('http://localhost:5000/api/shopify/ai_collections', {
-          fetch('https://picturefindr.com/api/shopify/ai_collections', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({ query: productTitle }),
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success && data.collections) {
-                aiCategories.renderCategories(data.collections);
-              } else {
-                throw new Error('Invalid response format');
-              }
-            })
-            .catch(error => {
-              console.error('Error with AI categories:', error);
-              document.getElementById('aiCategories').innerHTML = '<div class="error-message">Failed to load categories</div>';
-            });
-          }) ();
+         // fetch('http://localhost:5000/api/shopify/ai_collections', {
+         fetch('https://picturefindr.com/api/shopify/ai_collections', {
+           method: 'POST',
+           headers: {
+             'Content-Type': 'application/json',
+             'Accept': 'application/json'
+           },
+           body: JSON.stringify({ query: productTitle }),
+         })
+           .then(response => response.json())
+           .then(data => {
+             if (data.success && data.collections) {
+               aiCategories.renderCategories(data.collections);
+             } else {
+               throw new Error('Invalid response format');
+             }
+           })
+           .catch(error => {
+             console.error('Error with AI categories:', error);
+             document.getElementById('aiCategories').innerHTML = '<div class="error-message">Failed to load categories</div>';
+           });
+         }) ();
     </script>
 
     <script type="application/ld+json">
@@ -369,7 +376,7 @@
       });
       {% endfor %}
       console.log('=== END VARIANTS DEBUG ===');
-      
+
       // Enhanced debug: Check variant-image mapping
       console.log('=== VARIANT-IMAGE MAPPING DEBUG ===');
       {% for variant in product.variants %}
@@ -418,7 +425,7 @@
           const imageFramePrice = priceElement.textContent;
           const priceDisplay = document.querySelector('.price__regular .product_sub_title');
           if (priceDisplay) {
-            priceDisplay.textContent = imageFramePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            priceDisplay.textContent = imageFramePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
           }
         }
 
@@ -429,23 +436,23 @@
         }
 
         // Determine image orientation
-        if (window.productImages[0].includes("square")) {
-          imageType = "square";
-        } else if (window.productImages[0].includes("landscape")) {
-          imageType = "landscape";
+        if (window.productImages[0].includes('square')) {
+          imageType = 'square';
+        } else if (window.productImages[0].includes('landscape')) {
+          imageType = 'landscape';
         } else {
-          imageType = "portrait";
+          imageType = 'portrait';
         }
-       
-        const picture_container = document.getElementById("picture-container");
-        console.log("imageType ============ ", imageType);
-        picture_container.style.width = imageType == "landscape" ? `90%` : `60%`;
-        picture_container.style.height = imageType == "landscape" ? `100%` : `100%`;
+
+        const picture_container = document.getElementById('picture-container');
+        console.log('imageType ============ ', imageType);
+        picture_container.style.width = imageType == 'landscape' ? `90%` : `60%`;
+        picture_container.style.height = imageType == 'landscape' ? `100%` : `100%`;
 
         const frameTypes = ['noframe', 'black', 'maple', 'white'];
         const newFrameType = frameTypes[frameType] || 'black';
         let imageNameSpace = `${imageScale}-${newFrameType}-${imageBorderWidth}`;
-        
+
         // Validate productImages availability
         if (!window.productImages || !Array.isArray(window.productImages)) {
           console.error('productImages is not available or not an array');
@@ -461,24 +468,24 @@
 
         // Find matching image with improved logic
         let imageUrl = findMatchingImage(imageNameSpace, imageType, imageBorderWidth);
-      
-        console.log("imageUrl ============ ", imageUrl);
+
+        console.log('imageUrl ============ ', imageUrl);
         productImage.src = imageUrl;
         window.productImageUrl = imageUrl;
-        
-        if (imageScale == "small") {
-          productImage.style.width = "80%";
-          productImage.style.height = "80%";
-        } else if (imageScale == "medium") {
-          productImage.style.width = "90%";
-          productImage.style.height = "90%";
+
+        if (imageScale == 'small') {
+          productImage.style.width = '80%';
+          productImage.style.height = '80%';
+        } else if (imageScale == 'medium') {
+          productImage.style.width = '90%';
+          productImage.style.height = '90%';
         } else {
-          productImage.style.width = "100%";
-          productImage.style.height = "100%";
+          productImage.style.width = '100%';
+          productImage.style.height = '100%';
         }
 
         // Hide spinner and show image
-        hideSpinner(spinner, productImage)
+        hideSpinner(spinner, productImage);
         // if (imageUrl) {
         //   // Preload image with proper error handling and mobile optimization
         //   loadImageWithFallback(imageUrl, productImage, spinner);
@@ -494,7 +501,7 @@
 
         // First try exact pattern match
         imageUrl = window.productImages.find((img) => {
-          const imgStr = typeof img === 'string' ? img : (img && img.src ? img.src : '');
+          const imgStr = typeof img === 'string' ? img : img && img.src ? img.src : '';
           return imgStr.includes(imageNameSpace);
         });
 
@@ -502,7 +509,7 @@
         if (!imageUrl) {
           const patternWithoutBorder = imageNameSpace.replace(`-${imageBorderWidth}`, '');
           imageUrl = window.productImages.find((img) => {
-            const imgStr = typeof img === 'string' ? img : (img && img.src ? img.src : '');
+            const imgStr = typeof img === 'string' ? img : img && img.src ? img.src : '';
             return imgStr.includes(patternWithoutBorder);
           });
         }
@@ -510,7 +517,7 @@
         // If still not found, try flexible matching by image type
         if (!imageUrl) {
           imageUrl = window.productImages.find((img) => {
-            const imgStr = typeof img === 'string' ? img : (img && img.src ? img.src : '');
+            const imgStr = typeof img === 'string' ? img : img && img.src ? img.src : '';
             return imgStr.includes(imageType) && imgStr.includes('black');
           });
         }
@@ -528,19 +535,21 @@
           console.warn('Product images not available for preloading');
           return;
         }
-        
+
         // Limit preloading on mobile to save memory and bandwidth
-        const isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isMobile =
+          window.innerWidth <= 768 ||
+          /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         const maxPreloadImages = isMobile ? 5 : window.productImages.length;
         window.productImages.slice(0, maxPreloadImages).forEach((imageUrl, index) => {
           // Stagger preloading to avoid overwhelming mobile networks
-          const imgStr = typeof imageUrl === 'string' ? imageUrl : (imageUrl && imageUrl.src ? imageUrl.src : '');
+          const imgStr = typeof imageUrl === 'string' ? imageUrl : imageUrl && imageUrl.src ? imageUrl.src : '';
           if (imgStr) {
             const img = new Image();
-            img.onload = function() {
+            img.onload = function () {
               window.preloadedImages[imgStr] = true;
             };
-            img.onerror = function() {
+            img.onerror = function () {
               console.warn('Failed to preload image:', imgStr);
             };
             img.src = imgStr;
@@ -560,13 +569,13 @@
       function setupEventHandlers() {
         // Support both click and touch events
         const eventTypes = ['click', 'touchend'];
-        
-        eventTypes.forEach(eventType => {
+
+        eventTypes.forEach((eventType) => {
           $(document).on(eventType, `#group-0 .option`, function (e) {
             if (eventType === 'touchend') {
               e.preventDefault(); // Prevent double firing on mobile
             }
-            
+
             $(this).addClass('active');
             $(this).siblings().removeClass('active');
             const selectedElement = $(this).closest('.ar_filter_group');
@@ -578,10 +587,10 @@
 
             const imageBorderElement = document.querySelector('#group-1 .option.active');
             const imageBorderWidth = imageBorderElement ? imageBorderElement.getAttribute('data-value') : '0';
-            
+
             let imageFrameType = 1;
             const imageFrameElement = document.querySelector('#group-2 .option.active');
-            if(imageFrameElement) {
+            if (imageFrameElement) {
               imageFrameType = imageFrameElement.getAttribute('data-value');
             } else {
               const frameOption = $('#group-2 .option_2-1');
@@ -597,37 +606,37 @@
             if (eventType === 'touchend') {
               e.preventDefault();
             }
-            
+
             $(this).addClass('active');
             $(this).siblings().removeClass('active');
             const frameType = $(this).attr('data-value');
 
             // Get frame name for variant selection
             const frameName = $(this).find('.component_title').text().trim();
-            
+
             const imageBorderElement = document.querySelector('#group-1 .option.active');
             const imageBorderWidth = imageBorderElement ? imageBorderElement.getAttribute('data-value') : '0';
 
-            let imageScale = ""
+            let imageScale = '';
             const activeElements = document.querySelector('#group-0 .option.active');
             if (activeElements) {
               imageScale = activeElements.getAttribute('data-scale');
               const imageWidth = activeElements.getAttribute('data-width');
               const imageHeight = activeElements.getAttribute('data-height');
-              
+
               changeFrameImageConfig(imageScale, imageWidth, imageHeight, imageBorderWidth, frameType);
             }
 
             // Update variant selection based on frame choice FIRST
             if (typeof updateVariantSelection === 'function') {
               if (!imageScale) {
-                imageScale = "medium";
+                imageScale = 'medium';
               }
               const frameTypes = ['noframe', 'black', 'maple', 'white'];
               const newFrameType = frameTypes[frameType] || 'black';
-              let variantName = imageScale + "-" + newFrameType + "-" + imageBorderWidth;
+              let variantName = imageScale + '-' + newFrameType + '-' + imageBorderWidth;
 
-              console.log("variantName ============ ", variantName);
+              console.log('variantName ============ ', variantName);
               updateVariantSelection(variantName);
             }
           });
@@ -636,21 +645,21 @@
             if (eventType === 'touchend') {
               e.preventDefault();
             }
-            
+
             $(this).addClass('active');
             $(this).siblings().removeClass('active');
 
             const imageBorderWidth = $(this).attr('data-value');
-            
+
             const activeElements = document.querySelector('#group-0 .option.active');
             const imageFrameElement = document.querySelector('#group-2 .option.active');
-            
+
             if (activeElements && imageFrameElement) {
               const imageScale = activeElements.getAttribute('data-scale');
               const imageWidth = activeElements.getAttribute('data-width');
               const imageHeight = activeElements.getAttribute('data-height');
               const frameType = imageFrameElement.getAttribute('data-value');
-              
+
               changeFrameImageConfig(imageScale, imageWidth, imageHeight, imageBorderWidth, frameType);
             }
           });
@@ -659,7 +668,7 @@
 
       const originalCheckChanges = window.checkChanges;
       window.checkChanges = function () {
-        console.log("window.checkChanges");
+        console.log('window.checkChanges');
         if (originalCheckChanges) {
           originalCheckChanges.apply(this, arguments);
         }
@@ -668,9 +677,9 @@
 
       document.addEventListener('DOMContentLoaded', function () {
         setupEventHandlers();
-        
+
         // Debug function for mobile troubleshooting
-        window.debugImageLoading = function() {
+        window.debugImageLoading = function () {
           const productImage = document.getElementById('product-main-image');
           const spinner = document.getElementById('main_spinner');
         };
@@ -684,8 +693,8 @@
         }
 
         // Set up error monitoring for mobile
-        window.addEventListener('error', function(e) {
-          if (e.filename && e.filename.includes('image') || e.message.includes('img')) {
+        window.addEventListener('error', function (e) {
+          if ((e.filename && e.filename.includes('image')) || e.message.includes('img')) {
             console.error('Image loading error detected:', e.message);
             console.error('Error details:', e);
           }
@@ -947,17 +956,26 @@
             }
 
             initializeTouchEvents() {
-              this.container.addEventListener('touchstart', (e) => {
-                this.touchStartX = e.touches[0].clientX;
-              }, { passive: true });
+              this.container.addEventListener(
+                'touchstart',
+                (e) => {
+                  this.touchStartX = e.touches[0].clientX;
+                },
+                { passive: true }
+              );
 
-              this.container.addEventListener('touchmove', (e) => {
-                this.touchEndX = e.touches[0].clientX;
-              }, { passive: true });
+              this.container.addEventListener(
+                'touchmove',
+                (e) => {
+                  this.touchEndX = e.touches[0].clientX;
+                },
+                { passive: true }
+              );
 
               this.container.addEventListener('touchend', () => {
                 const swipeDistance = this.touchStartX - this.touchEndX;
-                if (Math.abs(swipeDistance) > 50) { // Minimum swipe distance
+                if (Math.abs(swipeDistance) > 50) {
+                  // Minimum swipe distance
                   if (swipeDistance > 0) {
                     this.slide('next');
                   } else {
@@ -978,11 +996,17 @@
                   <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
                 </button>
                 <div class="categories-slider">
-                  ${categories.map(category => `
-                    <div class="category-card" onclick="window.location.href='/search?q=${encodeURIComponent(category)}'">
+                  ${categories
+                    .map(
+                      (category) => `
+                    <div class="category-card" onclick="window.location.href='/search?q=${encodeURIComponent(
+                      category
+                    )}'">
                       <div class="category-title">${category}</div>
                     </div>
-                  `).join('')}
+                  `
+                    )
+                    .join('')}
                 </div>
                 <button id="nextButton" class="nav-button next-button" aria-label="Next categories">
                   <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
@@ -1071,100 +1095,101 @@
         <div class="related-products-section main_container">
           <div class="template-search__results collection">
             <ul class="grid product-grid grid--1-col-tablet-down grid--4-col-desktop">
-                             {%- assign related_count = 0 -%}
-               {%- assign max_related = 12 -%}
-               {%- assign shown_product_ids = '' -%}
-               
-               {%- comment -%} 
-                 Enhanced Related Products Algorithm:
-                 1. Search-based matching (if title contains searchable terms)
-                 2. High shared tags (6+ tags in common)
-                 3. Medium shared tags (3-5 tags in common)
-                 4. Low shared tags (1-2 tags in common)
-               {%- endcomment -%}
-               
-               {%- comment -%} PASS 1: Search-based matching for titles like "Old City" {%- endcomment -%}
-               {%- assign current_title_lower = current_product.title | downcase -%}
-               {%- assign title_words = current_title_lower | split: ' ' -%}
-               
-               {%- for product in collections.all.products limit: 100 -%}
-                 {%- if product.id != current_product.id and related_count < max_related -%}
-                   {%- assign product_title_lower = product.title | downcase -%}
-                   {%- assign product_description_lower = product.description | downcase -%}
-                   {%- assign search_match_score = 0 -%}
-                   
-                   {%- comment -%} Check if product title/description contains words from current title {%- endcomment -%}
-                   {%- for title_word in title_words -%}
-                     {%- if title_word.size >= 3 -%} {%- comment -%} Only consider words 3+ characters {%- endcomment -%}
-                       {%- if product_title_lower contains title_word -%}
-                         {%- assign search_match_score = search_match_score | plus: 3 -%} {%- comment -%} Title match is worth 3 points {%- endcomment -%}
-                       {%- endif -%}
-                       {%- if product_description_lower contains title_word -%}
-                         {%- assign search_match_score = search_match_score | plus: 1 -%} {%- comment -%} Description match is worth 1 point {%- endcomment -%}
-                       {%- endif -%}
-                       
-                       {%- comment -%} Also check tags for the search terms {%- endcomment -%}
-                       {%- for product_tag in product.tags -%}
-                         {%- assign tag_lower = product_tag | downcase -%}
-                         {%- if tag_lower contains title_word -%}
-                           {%- assign search_match_score = search_match_score | plus: 2 -%} {%- comment -%} Tag match is worth 2 points {%- endcomment -%}
-                         {%- endif -%}
-                       {%- endfor -%}
-                     {%- endif -%}
-                   {%- endfor -%}
-                   
-                   {%- comment -%} Show products with high search relevance (like search results) {%- endcomment -%}
-                   {%- if search_match_score >= 3 -%}
-                     {%- assign shown_product_ids = shown_product_ids | append: ',' | append: product.id -%}
-                     <li class="grid__item" data-match-type="search" data-search-score="{{ search_match_score }}">
-                       {%- render 'card-product',
-                         card_product: product,
-                         media_aspect_ratio: section.settings.image_ratio,
-                         image_shape: section.settings.image_shape,
-                         show_secondary_image: section.settings.show_secondary_image,
-                         show_vendor: section.settings.show_vendor,
-                         show_rating: section.settings.show_rating,
-                         lazy_load: true
-                       -%}
-                     </li>
-                     {%- assign related_count = related_count | plus: 1 -%}
-                   {%- endif -%}
-                   
-                 {%- endif -%}
-               {%- endfor -%}
-               
-               {%- comment -%} PASS 2: High shared tags (6+ tags) {%- endcomment -%}
-               {%- for product in collections.all.products limit: 100 -%}
-                 {%- if product.id != current_product.id and related_count < max_related -%}
-                   {%- assign product_id_str = product.id | append: '' -%}
-                   {%- unless shown_product_ids contains product_id_str -%}
-                     
-                     {%- assign shared_tags_count = 0 -%}
-                     {%- for current_tag in current_product.tags -%}
-                       {%- if product.tags contains current_tag -%}
-                         {%- assign shared_tags_count = shared_tags_count | plus: 1 -%}
-                       {%- endif -%}
-                     {%- endfor -%}
-                     
-                     {%- if shared_tags_count >= 6 -%}
-                       {%- assign shown_product_ids = shown_product_ids | append: ',' | append: product.id -%}
-                       <li class="grid__item" data-match-type="high-tags" data-shared-tags="{{ shared_tags_count }}">
-                         {%- render 'card-product',
-                           card_product: product,
-                           media_aspect_ratio: section.settings.image_ratio,
-                           image_shape: section.settings.image_shape,
-                           show_secondary_image: section.settings.show_secondary_image,
-                           show_vendor: section.settings.show_vendor,
-                           show_rating: section.settings.show_rating,
-                           lazy_load: true
-                         -%}
-                       </li>
-                       {%- assign related_count = related_count | plus: 1 -%}
-                     {%- endif -%}
-                     
-                   {%- endunless -%}
-                 {%- endif -%}
-               {%- endfor -%}
+              {%- assign related_count = 0 -%}
+              {%- assign max_related = 12 -%}
+              {%- assign shown_product_ids = '' -%}
+
+              {%- comment -%}
+                Enhanced Related Products Algorithm:
+                1. Search-based matching (if title contains searchable terms)
+                2. High shared tags (6+ tags in common)
+                3. Medium shared tags (3-5 tags in common)
+                4. Low shared tags (1-2 tags in common)
+              {%- endcomment -%}
+
+              {%- comment -%} PASS 1: Search-based matching for titles like "Old City" {%- endcomment -%}
+              {%- assign current_title_lower = current_product.title | downcase -%}
+              {%- assign title_words = current_title_lower | split: ' ' -%}
+
+              {%- for product in collections.all.products limit: 100 -%}
+                {%- if product.id != current_product.id and related_count < max_related -%}
+                  {%- assign product_title_lower = product.title | downcase -%}
+                  {%- assign product_description_lower = product.description | downcase -%}
+                  {%- assign search_match_score = 0 -%}
+
+                  {%- comment -%} Check if product title/description contains words from current title {%- endcomment -%}
+                  {%- for title_word in title_words -%}
+                    {%- if title_word.size >= 3 -%}
+                      {%- comment -%} Only consider words 3+ characters {%- endcomment -%}
+                      {%- if product_title_lower contains title_word -%}
+                        {%- assign search_match_score = search_match_score | plus: 3 -%}
+                        {%- comment -%} Title match is worth 3 points {%- endcomment -%}
+                      {%- endif -%}
+                      {%- if product_description_lower contains title_word -%}
+                        {%- assign search_match_score = search_match_score | plus: 1 -%}
+                        {%- comment -%} Description match is worth 1 point {%- endcomment -%}
+                      {%- endif -%}
+
+                      {%- comment -%} Also check tags for the search terms {%- endcomment -%}
+                      {%- for product_tag in product.tags -%}
+                        {%- assign tag_lower = product_tag | downcase -%}
+                        {%- if tag_lower contains title_word -%}
+                          {%- assign search_match_score = search_match_score | plus: 2 -%}
+                          {%- comment -%} Tag match is worth 2 points {%- endcomment -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- comment -%} Show products with high search relevance (like search results) {%- endcomment -%}
+                  {%- if search_match_score >= 3 -%}
+                    {%- assign shown_product_ids = shown_product_ids | append: ',' | append: product.id -%}
+                    <li class="grid__item" data-match-type="search" data-search-score="{{ search_match_score }}">
+                      {%- render 'card-product',
+                        card_product: product,
+                        media_aspect_ratio: section.settings.image_ratio,
+                        image_shape: section.settings.image_shape,
+                        show_secondary_image: section.settings.show_secondary_image,
+                        show_vendor: section.settings.show_vendor,
+                        show_rating: section.settings.show_rating,
+                        lazy_load: true
+                      -%}
+                    </li>
+                    {%- assign related_count = related_count | plus: 1 -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+
+              {%- comment -%} PASS 2: High shared tags (6+ tags) {%- endcomment -%}
+              {%- for product in collections.all.products limit: 100 -%}
+                {%- if product.id != current_product.id and related_count < max_related -%}
+                  {%- assign product_id_str = product.id | append: '' -%}
+                  {%- unless shown_product_ids contains product_id_str -%}
+                    {%- assign shared_tags_count = 0 -%}
+                    {%- for current_tag in current_product.tags -%}
+                      {%- if product.tags contains current_tag -%}
+                        {%- assign shared_tags_count = shared_tags_count | plus: 1 -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    {%- if shared_tags_count >= 6 -%}
+                      {%- assign shown_product_ids = shown_product_ids | append: ',' | append: product.id -%}
+                      <li class="grid__item" data-match-type="high-tags" data-shared-tags="{{ shared_tags_count }}">
+                        {%- render 'card-product',
+                          card_product: product,
+                          media_aspect_ratio: section.settings.image_ratio,
+                          image_shape: section.settings.image_shape,
+                          show_secondary_image: section.settings.show_secondary_image,
+                          show_vendor: section.settings.show_vendor,
+                          show_rating: section.settings.show_rating,
+                          lazy_load: true
+                        -%}
+                      </li>
+                      {%- assign related_count = related_count | plus: 1 -%}
+                    {%- endif -%}
+                  {%- endunless -%}
+                {%- endif -%}
+              {%- endfor -%}
             </ul>
           </div>
         </div>
@@ -1178,27 +1203,27 @@
         if (container) {
           container.classList.toggle('hide-related-debug');
         }
-        
+
         console.log('=== ENHANCED RELATED PRODUCTS ANALYSIS ===');
         console.log('Current Product Title:', {{ current_product.title | json }});
         console.log('Current Product Tags:', {{ current_product.tags | json }});
-        
+
         const matchTypes = {};
         const searchResults = document.querySelectorAll('[data-match-type="search"]');
         const highTagResults = document.querySelectorAll('[data-match-type="high-tags"]');
         const mediumTagResults = document.querySelectorAll('[data-match-type="medium-tags"]');
         const lowTagResults = document.querySelectorAll('[data-match-type="low-tags"]');
-        
+
         console.log('\n🔍 SEARCH-BASED MATCHES:', searchResults.length);
         searchResults.forEach(item => {
           const score = item.getAttribute('data-search-score');
           console.log(`  - Score: ${score} (higher = better match)`);
         });
-        
+
         console.log('\n✅ HIGH TAG MATCHES (6+ tags):', highTagResults.length);
         console.log('📊 MEDIUM TAG MATCHES (3-5 tags):', mediumTagResults.length);
         console.log('⚡ LOW TAG MATCHES (1-2 tags):', lowTagResults.length);
-        
+
         console.log('\n=== FOR "OLD CITY" EXAMPLE ===');
         console.log('Search matches will find products with:');
         console.log('- "old" or "city" in title (3 points each)');
@@ -1206,7 +1231,7 @@
         console.log('- "old" or "city" in description (1 point each)');
         console.log('Products with 3+ points will appear first (like search results)');
         console.log('=== END ANALYSIS ===');
-        
+
         return {
           search: searchResults.length,
           highTags: highTagResults.length,
@@ -1215,22 +1240,22 @@
           total: searchResults.length + highTagResults.length + mediumTagResults.length + lowTagResults.length
         };
       };
-      
+
       // Auto-show debug for 10 seconds
       document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.related-products-section');
-        
+
         setTimeout(() => {
           if (container && window.location.hostname !== 'localhost') {
             container.classList.add('hide-related-debug');
           }
         }, 10000);
-        
+
         setTimeout(() => {
           window.debugRelatedProducts();
         }, 1000);
       });
-      
+
       // Keyboard shortcut: Ctrl+Shift+S for Search debug
       document.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.shiftKey && e.key === 'S') {
@@ -1439,6 +1464,51 @@
           "label": "Page"
         }
       ]
+    },
+    {
+      "type": "custom_message",
+      "name": "Custom Message",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Custom Message"
+        },
+        {
+          "type": "richtext",
+          "id": "message",
+          "label": "Message",
+          "default": "<p>Add your custom message here.</p>"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Text Color",
+          "default": "#333333"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            {
+              "value": "above_price",
+              "label": "Above Price"
+            },
+            {
+              "value": "below_price",
+              "label": "Below Price"
+            },
+            {
+              "value": "below_description",
+              "label": "Below Description"
+            }
+          ],
+          "default": "below_price"
+        }
+      ]
     }
   ]
 }
@@ -1465,7 +1535,7 @@
     const addToCartButton = document.getElementById('add_to_cart');
     if (addToCartButton) {
       addToCartButton.removeAttribute('disabled');
-      
+
       // Also update the button text if it shows "sold out"
       const buttonText = addToCartButton.querySelector('span');
       if (buttonText && buttonText.textContent.toLowerCase().includes('sold out')) {
@@ -1730,7 +1800,7 @@
       }
     }
 
-    
+
     // Debug: Check form setup
     const form = document.getElementById('product-form');
     const button = document.getElementById('add_to_cart');
@@ -1840,16 +1910,19 @@
       }
 
       // Show loading state immediately
-      addToCartButton.innerHTML = '<span style="display: inline-block; width: 20px; height: 20px; border: 2px solid #f3f3f3; border-top: 2px solid #333; border-radius: 50%; animation: spin 1s linear infinite;"></span> Adding...';
+      addToCartButton.innerHTML =
+        '<span style="display: inline-block; width: 20px; height: 20px; border: 2px solid #f3f3f3; border-top: 2px solid #333; border-radius: 50%; animation: spin 1s linear infinite;"></span> Adding...';
       addToCartButton.disabled = true;
 
       // Remove any existing property inputs to avoid duplicates
       const existingProperties = form.querySelectorAll('input[name^="properties["]');
-      existingProperties.forEach(input => input.remove());
+      existingProperties.forEach((input) => input.remove());
 
       // Get the active frame option
       const activeFrameOption = document.querySelector('#group-2 .option.active');
-      const frameType = activeFrameOption ? activeFrameOption.querySelector('.component_title').textContent.trim() : 'No Frame';
+      const frameType = activeFrameOption
+        ? activeFrameOption.querySelector('.component_title').textContent.trim()
+        : 'No Frame';
 
       // Get the active dimension option
       const activeDimensionOption = document.querySelector('#group-0 .option.active');
@@ -1868,7 +1941,7 @@
       updateVariantSelection(frameType);
 
       // Wait a moment to ensure variant selection is processed
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       // Verify the variant ID was updated
       const variantIdInput = document.getElementById('variant-id');
@@ -1912,19 +1985,19 @@
 
       // Debug: Log form data before submission
       const formData = new FormData(form);
-      console.log("=== FORM SUBMISSION DEBUG ===");
-      console.log("Form data before submission:");
+      console.log('=== FORM SUBMISSION DEBUG ===');
+      console.log('Form data before submission:');
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      
+
       // Double check the variant ID one more time
       const finalCheck = document.getElementById('variant-id');
       console.log(`Final variant check - Element value: ${finalCheck ? finalCheck.value : 'Not found'}`);
-      
+
       // Check which variant this corresponds to in our debug data
       if (window.debugProductVariants && finalCheck) {
-        const selectedVariant = window.debugProductVariants.find(v => v.id.toString() === finalCheck.value);
+        const selectedVariant = window.debugProductVariants.find((v) => v.id.toString() === finalCheck.value);
         if (selectedVariant) {
           console.log('Selected variant details:', selectedVariant);
           console.log(`Price that should be applied: $${(selectedVariant.price / 100).toFixed(2)}`);
@@ -1932,12 +2005,12 @@
           console.warn('Could not find variant details for ID:', finalCheck.value);
         }
       }
-      console.log("=== END FORM SUBMISSION DEBUG ===");
+      console.log('=== END FORM SUBMISSION DEBUG ===');
 
       // Submit the form
       try {
         form.submit();
-        console.log("Form submitted successfully");
+        console.log('Form submitted successfully');
       } catch (error) {
         console.error('Error submitting form:', error);
         // Reset button on error
@@ -1953,34 +2026,37 @@
   }
 
   // Function to update variant selection based on frame type
-  window.updateVariantSelection = function(frameType) {
+  window.updateVariantSelection = function (frameType) {
     console.log(`updateVariantSelection called with frameType: ${frameType}`);
-    
+
     const variantSelect = document.getElementById('product-select');
     const variantIdInput = document.getElementById('variant-id');
-    console.log("variantSelect ============ ", variantSelect);
-    console.log("variantIdInput ============ ", variantIdInput);
+    console.log('variantSelect ============ ', variantSelect);
+    console.log('variantIdInput ============ ', variantIdInput);
     if (!variantSelect || !variantIdInput) {
-      console.warn('Variant select or input not found', { variantSelect: !!variantSelect, variantIdInput: !!variantIdInput });
+      console.warn('Variant select or input not found', {
+        variantSelect: !!variantSelect,
+        variantIdInput: !!variantIdInput,
+      });
       return false;
     }
 
     console.log(`Current variant ID before update: ${variantIdInput.value}`);
-    
+
     // Find the matching variant option - try multiple strategies
     const options = variantSelect.querySelectorAll('option');
     console.log(`Found ${options.length} variant options`);
-    
+
     let found = false;
-    
+
     // Strategy 1: Exact match with frame type
     for (let option of options) {
       const optionVariantName = option.getAttribute('data-variant-name');
       console.log(`Checking option: ${option.value} with variant name: ${optionVariantName}`);
-      
+
       if (optionVariantName === frameType) {
         const oldVariantId = variantIdInput.value;
-        
+
         // Update both select and hidden input
         variantSelect.value = option.value;
         variantIdInput.value = option.value;
@@ -1989,96 +2065,103 @@
         break;
       }
     }
-    
+
     // Strategy 2: Pattern-based matching if exact match fails
     if (!found) {
       console.log('Exact match failed, trying pattern matching...');
-      
+
       // Get current configuration to build variant pattern
       const activeDimensionOption = document.querySelector('#group-0 .option.active');
       const activeBorderOption = document.querySelector('#group-1 .option.active');
-      
+
       const scale = activeDimensionOption ? activeDimensionOption.getAttribute('data-scale') : 'medium';
       const borderValue = activeBorderOption ? activeBorderOption.getAttribute('data-value') : '0';
-      
+
       // Map frame types to expected variant name patterns
       const frameToPattern = {
         'No Frame': ['original', 'noframe', 'no frame'],
         'Black Mat': ['black'],
         'Maple Natural': ['maple'],
-        'White': ['white']
+        White: ['white'],
       };
-      
+
       const patterns = frameToPattern[frameType] || ['original'];
       const expectedPattern = `${scale}-${patterns[0]}-${borderValue}`;
-      
+
       console.log(`Looking for pattern: ${expectedPattern}`);
-      
+
       for (let option of options) {
         const optionVariantName = option.getAttribute('data-variant-name');
-        
+
         // Check if variant name contains the expected pattern
         for (let pattern of patterns) {
           if (optionVariantName && optionVariantName.toLowerCase() == expectedPattern.toLowerCase()) {
             const oldVariantId = variantIdInput.value;
-            
+
             // Update both select and hidden input
             variantSelect.value = option.value;
             variantIdInput.value = option.value;
-            
+
             console.log(`✓ Pattern match found: Updated variant ID from ${oldVariantId} to ${option.value}`);
-            
+
             // Update the displayed price
             updateDisplayedPrice(option.getAttribute('data-price'));
-            
+
             // Trigger change event to update price display
             variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
             variantIdInput.dispatchEvent(new Event('change', { bubbles: true }));
-            
+
             found = true;
-            console.log(`✓ Successfully updated variant to: ${option.value} (${frameType}) - Price: ${option.getAttribute('data-price')}`);
+            console.log(
+              `✓ Successfully updated variant to: ${option.value} (${frameType}) - Price: ${option.getAttribute(
+                'data-price'
+              )}`
+            );
             break;
           }
         }
-        
+
         if (found) break;
       }
     }
-    
+
     if (!found) {
       console.warn(`❌ No variant found for frame type: ${frameType}`);
-      console.log('Available variants:', Array.from(options).map(opt => ({
-        id: opt.value,
-        name: opt.getAttribute('data-variant-name'),
-        title: opt.textContent
-      })));
+      console.log(
+        'Available variants:',
+        Array.from(options).map((opt) => ({
+          id: opt.value,
+          name: opt.getAttribute('data-variant-name'),
+          title: opt.textContent,
+        }))
+      );
     }
-    
+
     return found;
-  }
+  };
 
   // Function to update the displayed price
   function updateDisplayedPrice(priceInCents) {
     if (!priceInCents) return;
-    
+
     const price = parseInt(priceInCents);
     const formattedPrice = new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(price / 100);
 
     // Update the price display
     const priceElements = document.querySelectorAll('.price .price-item--regular, .price .price-item--sale');
-    priceElements.forEach(element => {
+    priceElements.forEach((element) => {
       element.textContent = formattedPrice;
     });
 
     // Also update any other price displays
     const productSubTitles = document.querySelectorAll('.product_sub_title');
-    productSubTitles.forEach(element => {
+    productSubTitles.forEach((element) => {
       element.textContent = formattedPrice;
     });
-    
+
     console.log(`Updated displayed price to: ${formattedPrice}`);
   }
 
@@ -2095,7 +2178,7 @@
           'data-variant-name': option.getAttribute('data-variant-name'),
           'data-price': option.getAttribute('data-price'),
           text: option.textContent.trim(),
-          selected: option.selected
+          selected: option.selected,
         });
       });
     } else {
@@ -2108,7 +2191,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     // Run debug function first
     debugVariantOptions();
-    
+
     const defaultFrame = document.querySelector('#group-2 .option_2-1');
     if (defaultFrame) {
       defaultFrame.click();
@@ -2117,7 +2200,7 @@
       if (typeof updateVariantSelection === 'function') {
         updateVariantSelection('medium-black-0');
       }
-      changeFrameImageConfig("medium", 40, 60, 0, 1);
+      changeFrameImageConfig('medium', 40, 60, 0, 1);
     }
   });
 </script>

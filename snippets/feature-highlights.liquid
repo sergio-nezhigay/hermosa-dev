@@ -1,0 +1,173 @@
+{% comment %}
+  Feature Highlights Snippet for Art Products
+
+  This snippet displays a list of key features for art products, such as original artwork, materials used, artist signature, and more.
+    It supports optional icons and a maximum number of features to display.
+{% endcomment %}
+
+{% liquid
+  # Configuration
+  assign show_icons = show_icons | default: true
+  assign max_features = max_features | default: 6
+
+  # Create feature objects as strings
+  assign feature_data = 'Original Artwork|Hand-painted by skilled artists, Museum-Quality Canvas|Printed on premium cotton canvas with archival inks for lasting vibrancy|materials,Artist Signature|Each painting is personally signed by the artist for authenticity|quality,Ready to Hang|Comes with pre-installed hanging hardware and gallery-wrapped edges|shipping,Protective Varnish|Sealed with UV-protective varnish to prevent fading and damage|materials,Certificate of Authenticity|Includes official documentation verifying the artwork and artist|quality'
+  assign features_raw = feature_data | split: ','
+%}
+
+<style>
+  .feature-highlights {
+    border-radius: var(--buttons-radius);
+    font-family: var(--font-body-family);
+    padding: 2.6rem 2.6rem 2.6rem 0;
+  }
+
+  .feature-highlights ul {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    list-style: none;
+  }
+
+  .feature-highlights li {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    background: rgb(var(--color-background));
+    border-radius: var(--text-boxes-radius);
+    padding: 2rem;
+    border: var(--text-boxes-border-width) solid rgba(var(--color-foreground), var(--text-boxes-border-opacity));
+    box-shadow: var(--text-boxes-shadow-horizontal-offset) var(--text-boxes-shadow-vertical-offset)
+      var(--text-boxes-shadow-blur-radius) rgba(var(--color-shadow), var(--text-boxes-shadow-opacity));
+    transition: transform var(--duration-short) ease, box-shadow var(--duration-short) ease;
+  }
+
+  .feature-highlights li:hover {
+    transform: translateY(-0.2rem);
+    box-shadow: var(--text-boxes-shadow-horizontal-offset) calc(var(--text-boxes-shadow-vertical-offset) + 0.2rem)
+      calc(var(--text-boxes-shadow-blur-radius) + 0.2rem) rgba(var(--color-shadow), var(--text-boxes-shadow-opacity));
+  }
+
+  .feature-highlights li svg {
+    min-width: 2.4rem;
+    height: 2.4rem;
+    color: rgb(var(--color-link));
+    flex-shrink: 0;
+  }
+
+  .feature-highlights li h3 {
+    margin: 0 0 0.5rem;
+    font-size: calc(var(--font-heading-scale) * 1.4rem);
+    line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale)));
+    color: rgb(var(--color-foreground));
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04rem;
+  }
+
+  .feature-highlights p {
+    margin: 0;
+    font-size: 1.4rem;
+    color: rgba(var(--color-foreground), 0.75);
+    line-height: calc(1 + 0.5 / var(--font-body-scale));
+    letter-spacing: 0.04rem;
+    font-family: var(--font-body-family);
+    font-style: var(--font-body-style);
+    font-weight: var(--font-body-weight);
+  }
+
+  @media screen and (min-width: 750px) {
+    .feature-highlights {
+      padding: 3.2rem 3.2rem 3.2rem 0;
+    }
+
+    .feature-highlights li {
+      padding: 2.4rem;
+    }
+
+    .feature-highlights p {
+      font-size: 1.6rem;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .feature-highlights ul {
+      gap: 2rem;
+    }
+
+    .feature-highlights li {
+      gap: 2rem;
+    }
+  }
+
+  /* Focus states for accessibility */
+  .feature-highlights li:focus-visible {
+    outline: var(--focused-base-outline);
+    outline-offset: var(--focused-base-outline-offset);
+    box-shadow: var(--focused-base-box-shadow);
+  }
+
+  .feature-highlights li:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: var(--text-boxes-shadow-horizontal-offset) var(--text-boxes-shadow-vertical-offset)
+      var(--text-boxes-shadow-blur-radius) rgba(var(--color-shadow), var(--text-boxes-shadow-opacity));
+  }
+</style>
+
+{% if features_raw and features_raw.size > 0 %}
+  <div data-component="feature-highlights" class="feature-highlights">
+    <ul role="list">
+      {% for feature_raw in features_raw limit: max_features %}
+        {% liquid
+          assign feature_parts = feature_raw | split: '|'
+          assign feature_title = feature_parts[0] | strip
+          assign feature_desc = feature_parts[1] | strip
+          assign feature_icon = feature_parts[2] | strip | default: 'star'
+
+          # Skip empty features
+          if feature_title == blank
+            continue
+          endif
+        %}
+
+        <li data-feature-index="{{ forloop.index }}">
+          {% if show_icons and feature_icon %}
+            <div aria-hidden="true">
+              {% case feature_icon %}
+                {% when 'quality' %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                {% when 'shipping' %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 6a2 2 0 0 1 4 0v1h-4V6zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10z"/>
+                  </svg>
+                {% when 'materials' %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                {% when 'artwork' %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l-.72.33L8 4.19 4.72 2.33 4 2v7.95l3.28 1.86L12 10l4.72 1.81L20 9.95V2l-.72.33L16 4.19 12.72 2.33 12 2zm6 6.13l-2.72-1.81L12 7.77 8.72 6.32 6 8.13V4.87l2.72 1.81L12 5.23l3.28 1.45L18 4.87v3.26zM12 12c-3.87 0-7 3.13-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.87-3.13-7-7-7z"/>
+                  </svg>
+                {% else %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+              {% endcase %}
+            </div>
+          {% endif %}
+
+          <div>
+            <h3>{{ feature_title }}</h3>
+            {% if feature_desc != blank %}
+              <p>{{ feature_desc }}</p>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
