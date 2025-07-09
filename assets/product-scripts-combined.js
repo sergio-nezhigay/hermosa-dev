@@ -1,24 +1,27 @@
 // Combined Product Scripts - Optimized for Performance
-(function() {
+(function () {
   'use strict';
 
   // Global configuration
   window.productConfig = window.productConfig || {};
-  
+
   // Cache DOM elements
   const DOM = {
     productImage: null,
     variantSelect: null,
-    frameOptions: null,
     priceElement: null,
+    frameOptions: null,
+
     addToCartButton: null,
     init() {
-      this.productImage = document.querySelector('.product__image') || document.getElementById('product-main-image');
+      this.productImage =
+        document.querySelector('.product__image') ||
+        document.getElementById('product-main-image');
       this.variantSelect = document.getElementById('product-select');
       this.frameOptions = document.querySelectorAll('#group-2 .option');
       this.priceElement = document.getElementById('product_price');
       this.addToCartButton = document.getElementById('add_to_cart');
-    }
+    },
   };
 
   // Utility functions
@@ -37,13 +40,13 @@
 
     throttle(func, limit) {
       let inThrottle;
-      return function() {
+      return function () {
         const args = arguments;
         const context = this;
         if (!inThrottle) {
           func.apply(context, args);
           inThrottle = true;
-          setTimeout(() => inThrottle = false, limit);
+          setTimeout(() => (inThrottle = false), limit);
         }
       };
     },
@@ -55,17 +58,17 @@
         img.onerror = reject;
         img.src = src;
       });
-    }
+    },
   };
 
   // Tab functionality
   const TabManager = {
     init() {
       const tabs = document.querySelectorAll('.tablinks');
-      tabs.forEach(tab => {
+      tabs.forEach((tab) => {
         tab.addEventListener('click', this.handleTabClick.bind(this));
       });
-      
+
       // Set first tab as active by default
       if (tabs.length > 0 && !document.querySelector('.tablinks.active')) {
         tabs[0].click();
@@ -73,7 +76,9 @@
     },
 
     handleTabClick(evt) {
-      const cityName = evt.target.getAttribute('onclick')?.match(/openCity\(event, '(.+)'\)/)?.[1];
+      const cityName = evt.target
+        .getAttribute('onclick')
+        ?.match(/openCity\(event, '(.+)'\)/)?.[1];
       if (cityName) {
         this.openCity(evt, cityName);
       }
@@ -105,18 +110,18 @@
       if (cityName === 'FAQ') {
         setTimeout(() => FAQManager.init(), 100);
       }
-    }
+    },
   };
 
   // FAQ functionality
   const FAQManager = {
     init() {
       const faqQuestions = document.querySelectorAll('.faq-question');
-      faqQuestions.forEach(question => {
+      faqQuestions.forEach((question) => {
         // Remove existing listeners to prevent duplicates
         const newQuestion = question.cloneNode(true);
         question.parentNode.replaceChild(newQuestion, question);
-        
+
         newQuestion.addEventListener('click', this.handleFAQClick.bind(this));
       });
     },
@@ -131,7 +136,7 @@
         answer.style.display = 'none';
       } else {
         // Close all other questions
-        document.querySelectorAll('.faq-question').forEach(q => {
+        document.querySelectorAll('.faq-question').forEach((q) => {
           q.classList.remove('active');
           if (q.nextElementSibling) {
             q.nextElementSibling.style.display = 'none';
@@ -142,7 +147,7 @@
         question.classList.add('active');
         answer.style.display = 'block';
       }
-    }
+    },
   };
 
   // Product configuration manager
@@ -152,7 +157,7 @@
       dimensions: 2,
       borderType: 3,
       width: 0,
-      height: 0
+      height: 0,
     },
 
     init() {
@@ -162,18 +167,27 @@
 
     setupEventListeners() {
       // Frame selection
-      document.querySelectorAll('#group-2 .option').forEach(option => {
-        option.addEventListener('click', Utils.debounce(this.handleFrameChange.bind(this), 250));
+      document.querySelectorAll('#group-2 .option').forEach((option) => {
+        option.addEventListener(
+          'click',
+          Utils.debounce(this.handleFrameChange.bind(this), 250)
+        );
       });
 
       // Border selection
-      document.querySelectorAll('#group-1 .option').forEach(option => {
-        option.addEventListener('click', Utils.debounce(this.handleBorderChange.bind(this), 250));
+      document.querySelectorAll('#group-1 .option').forEach((option) => {
+        option.addEventListener(
+          'click',
+          Utils.debounce(this.handleBorderChange.bind(this), 250)
+        );
       });
 
       // Dimension selection
-      document.querySelectorAll('#group-0 .option').forEach(option => {
-        option.addEventListener('click', Utils.debounce(this.handleDimensionChange.bind(this), 250));
+      document.querySelectorAll('#group-0 .option').forEach((option) => {
+        option.addEventListener(
+          'click',
+          Utils.debounce(this.handleDimensionChange.bind(this), 250)
+        );
       });
     },
 
@@ -211,7 +225,9 @@
     setActiveOption(option, groupSelector) {
       const group = document.querySelector(groupSelector);
       if (group) {
-        group.querySelectorAll('.option').forEach(opt => opt.classList.remove('active'));
+        group
+          .querySelectorAll('.option')
+          .forEach((opt) => opt.classList.remove('active'));
         option.classList.add('active');
       }
     },
@@ -229,30 +245,46 @@
       const imageWidth = activeDimension.getAttribute('data-width');
       const imageHeight = activeDimension.getAttribute('data-height');
 
-      this.changeFrameImageConfig(imageScale, imageWidth, imageHeight, borderWidth, frameType);
+      this.changeFrameImageConfig(
+        imageScale,
+        imageWidth,
+        imageHeight,
+        borderWidth,
+        frameType
+      );
     },
 
-    changeFrameImageConfig(imageScale, imageWidth, imageHeight, imageBorderWidth, frameType) {
+    changeFrameImageConfig(
+      imageScale,
+      imageWidth,
+      imageHeight,
+      imageBorderWidth,
+      frameType
+    ) {
       const frameTypes = ['noframe', 'black', 'maple', 'white'];
       const newFrameType = frameTypes[frameType] || 'black';
-      
-      let imageType = "landscape";
+
+      let imageType = 'landscape';
       if (Number(imageWidth) > Number(imageHeight)) {
-        imageType = "landscape";
+        imageType = 'landscape';
       } else if (Number(imageWidth) < Number(imageHeight)) {
-        imageType = "portrait";
+        imageType = 'portrait';
       } else {
-        imageType = "square";
+        imageType = 'square';
       }
 
       const imageNameSpace = `${imageScale}-${newFrameType}-${imageBorderWidth}`;
-      
+
       if (!window.productConfig.productImages) return;
 
-      let imageUrl = window.productConfig.productImages.find(img => {
-        const imgStr = typeof img === 'string' ? img : (img && img.src ? img.src : '');
-        return imgStr.includes(imageNameSpace) || 
-               (imgStr.includes(imageType) && imgStr.includes(`${newFrameType}-${imageBorderWidth}`));
+      let imageUrl = window.productConfig.productImages.find((img) => {
+        const imgStr =
+          typeof img === 'string' ? img : img && img.src ? img.src : '';
+        return (
+          imgStr.includes(imageNameSpace) ||
+          (imgStr.includes(imageType) &&
+            imgStr.includes(`${newFrameType}-${imageBorderWidth}`))
+        );
       });
 
       if (imageUrl && typeof imageUrl === 'object' && imageUrl.src) {
@@ -261,23 +293,26 @@
 
       if (imageUrl && DOM.productImage) {
         // Preload image for smooth transition
-        Utils.preloadImage(imageUrl).then(() => {
-          DOM.productImage.style.opacity = '0.5';
-          DOM.productImage.src = imageUrl;
-          DOM.productImage.onload = () => {
-            DOM.productImage.style.opacity = '1';
-          };
-        }).catch(() => {
-          console.warn('Failed to preload image:', imageUrl);
-          DOM.productImage.src = imageUrl;
-        });
+        Utils.preloadImage(imageUrl)
+          .then(() => {
+            DOM.productImage.style.opacity = '0.5';
+            DOM.productImage.src = imageUrl;
+            DOM.productImage.onload = () => {
+              DOM.productImage.style.opacity = '1';
+            };
+          })
+          .catch(() => {
+            console.warn('Failed to preload image:', imageUrl);
+            DOM.productImage.src = imageUrl;
+          });
       }
     },
 
     updatePriceDisplay(option) {
       const priceElement = option.querySelector('.component_price');
       if (priceElement && DOM.priceElement) {
-        const priceDisplay = DOM.priceElement.querySelector('.product_sub_title');
+        const priceDisplay =
+          DOM.priceElement.querySelector('.product_sub_title');
         if (priceDisplay) {
           priceDisplay.textContent = priceElement.textContent;
         }
@@ -288,20 +323,23 @@
       const activeOption = document.querySelector('#group-2 .option.active');
       if (!activeOption || !DOM.variantSelect) return;
 
-      const frameType = activeOption.querySelector('.component_title').textContent.trim().toLowerCase();
-      
+      const frameType = activeOption
+        .querySelector('.component_title')
+        .textContent.trim()
+        .toLowerCase();
+
       let variantName = 'original';
       if (frameType === 'black mat') variantName = 'black';
       else if (frameType === 'maple natural') variantName = 'maple';
       else if (frameType === 'white') variantName = 'white';
 
       const matchingOption = Array.from(DOM.variantSelect.options).find(
-        option => option.getAttribute('data-variant-name') === variantName
+        (option) => option.getAttribute('data-variant-name') === variantName
       );
 
       if (matchingOption) {
         DOM.variantSelect.value = matchingOption.value;
-        
+
         const variantInput = document.getElementById('variant-id');
         if (variantInput) {
           variantInput.value = matchingOption.value;
@@ -314,11 +352,12 @@
         if (price && DOM.priceElement) {
           const formattedPrice = new Intl.NumberFormat('en-US', {
             style: 'currency',
-            currency: 'USD'
+            currency: 'USD',
           }).format(price / 100);
 
-          const priceSpan = DOM.priceElement.querySelector('.price__sale') || 
-                          DOM.priceElement.querySelector('.price__regular');
+          const priceSpan =
+            DOM.priceElement.querySelector('.price__sale') ||
+            DOM.priceElement.querySelector('.price__regular');
           if (priceSpan) {
             const priceAmount = priceSpan.querySelector('.price-item');
             if (priceAmount) {
@@ -327,7 +366,7 @@
           }
         }
       }
-    }
+    },
   };
 
   // Modal functionality
@@ -346,10 +385,15 @@
 
     setupEventListeners() {
       document.addEventListener('mousedown', this.handleMouseDown.bind(this));
-      document.addEventListener('mousemove', Utils.throttle(this.handleMouseMove.bind(this), 16));
+      document.addEventListener(
+        'mousemove',
+        Utils.throttle(this.handleMouseMove.bind(this), 16)
+      );
       document.addEventListener('mouseup', this.handleMouseUp.bind(this));
       document.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
-      document.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+      document.addEventListener('wheel', this.handleWheel.bind(this), {
+        passive: false,
+      });
     },
 
     openModal() {
@@ -359,10 +403,10 @@
       if (productImage && modal) {
         const imgUrl = productImage.src;
         const modalContent = modal.querySelector('.modal-content');
-        
+
         modalContent.innerHTML = `
           <span class="close-modal" onclick="ModalManager.closeModal()">&times;</span>
-          <img src="${imgUrl}" alt="${productImage.alt || 'Product image'}" 
+          <img src="${imgUrl}" alt="${productImage.alt || 'Product image'}"
                class="modal-image" loading="lazy" decoding="async"/>
         `;
 
@@ -423,7 +467,9 @@
         const newTranslateX = this.currentTranslateX + deltaX;
         const newTranslateY = this.currentTranslateY + deltaY;
 
-        image.style.transform = `scale(1.5) translate(${newTranslateX / 1.5}px, ${newTranslateY / 1.5}px)`;
+        image.style.transform = `scale(1.5) translate(${
+          newTranslateX / 1.5
+        }px, ${newTranslateY / 1.5}px)`;
 
         this.dragStartX = event.clientX;
         this.dragStartY = event.clientY;
@@ -498,41 +544,56 @@
       if (event.key === 'Escape') {
         this.closeModal();
       }
-    }
+    },
   };
 
   // Add to cart functionality
   const CartManager = {
     init() {
       if (DOM.addToCartButton) {
-        DOM.addToCartButton.addEventListener('click', this.handleAddToCart.bind(this));
+        DOM.addToCartButton.addEventListener(
+          'click',
+          this.handleAddToCart.bind(this)
+        );
       }
     },
 
     handleAddToCart(event) {
       event.preventDefault();
-      
+
       ProductManager.syncConfiguratorToVariant();
-      
+
       const form = DOM.addToCartButton.closest('form');
       if (!form) return;
 
       // Get configuration data
-      const activeFrameOption = document.querySelector('#group-2 .option.active');
-      const activeDimensionOption = document.querySelector('#group-0 .option.active');
-      const activeBorderOption = document.querySelector('#group-1 .option.active');
+      const activeFrameOption = document.querySelector(
+        '#group-2 .option.active'
+      );
+      const activeDimensionOption = document.querySelector(
+        '#group-0 .option.active'
+      );
+      const activeBorderOption = document.querySelector(
+        '#group-1 .option.active'
+      );
 
-      const frameType = activeFrameOption ? 
-        activeFrameOption.querySelector('.component_title').textContent.trim() : 'No Frame';
-      
-      const dimensionWidth = activeDimensionOption ? 
-        activeDimensionOption.getAttribute('data-width') : '';
-      const dimensionHeight = activeDimensionOption ? 
-        activeDimensionOption.getAttribute('data-height') : '';
+      const frameType = activeFrameOption
+        ? activeFrameOption.querySelector('.component_title').textContent.trim()
+        : 'No Frame';
+
+      const dimensionWidth = activeDimensionOption
+        ? activeDimensionOption.getAttribute('data-width')
+        : '';
+      const dimensionHeight = activeDimensionOption
+        ? activeDimensionOption.getAttribute('data-height')
+        : '';
       const dimensionText = `${dimensionWidth}" x ${dimensionHeight}"`;
-      
-      const borderType = activeBorderOption ? 
-        activeBorderOption.querySelector('.component_title').textContent.trim() : 'no border';
+
+      const borderType = activeBorderOption
+        ? activeBorderOption
+            .querySelector('.component_title')
+            .textContent.trim()
+        : 'no border';
 
       // Add properties to form
       this.addHiddenInput(form, 'properties[Frame Type]', frameType);
@@ -540,7 +601,11 @@
       this.addHiddenInput(form, 'properties[Border]', borderType);
 
       if (DOM.productImage && DOM.productImage.src) {
-        this.addHiddenInput(form, 'properties[_variant_image]', DOM.productImage.src);
+        this.addHiddenInput(
+          form,
+          'properties[_variant_image]',
+          DOM.productImage.src
+        );
       }
 
       // Show loading state
@@ -568,11 +633,12 @@
     showLoadingState() {
       if (DOM.addToCartButton) {
         const originalText = DOM.addToCartButton.innerHTML;
-        DOM.addToCartButton.innerHTML = '<span class="spinner"></span> Processing...';
+        DOM.addToCartButton.innerHTML =
+          '<span class="spinner"></span> Processing...';
         DOM.addToCartButton.disabled = true;
         DOM.addToCartButton.classList.add('loading');
       }
-    }
+    },
   };
 
   // AI Categories functionality
@@ -591,13 +657,21 @@
     },
 
     initializeTouchEvents() {
-      this.container.addEventListener('touchstart', (e) => {
-        this.touchStartX = e.touches[0].clientX;
-      }, { passive: true });
+      this.container.addEventListener(
+        'touchstart',
+        (e) => {
+          this.touchStartX = e.touches[0].clientX;
+        },
+        { passive: true }
+      );
 
-      this.container.addEventListener('touchmove', (e) => {
-        this.touchEndX = e.touches[0].clientX;
-      }, { passive: true });
+      this.container.addEventListener(
+        'touchmove',
+        (e) => {
+          this.touchEndX = e.touches[0].clientX;
+        },
+        { passive: true }
+      );
 
       this.container.addEventListener('touchend', () => {
         const swipeDistance = this.touchStartX - this.touchEndX;
@@ -615,20 +689,23 @@
       if (!window.productConfig.productTitle) return;
 
       try {
-        const response = await fetch('https://picturefindr.com/api/shopify/ai_collections', {
-        // const response = await fetch('http://localhost:5000/api/shopify/ai_collections', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({ query: window.productConfig.productTitle }),
-        });
+        const response = await fetch(
+          'https://picturefindr.com/api/shopify/ai_collections',
+          {
+            // const response = await fetch('http://localhost:5000/api/shopify/ai_collections', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({ query: window.productConfig.productTitle }),
+          }
+        );
 
         if (!response.ok) throw new Error('Network response was not ok');
-        
+
         const data = await response.json();
-        
+
         if (data.success && data.collections) {
           this.renderCategories(data.collections);
         } else {
@@ -636,13 +713,15 @@
         }
       } catch (error) {
         console.error('Error loading AI categories:', error);
-        this.container.innerHTML = '<div class="error-message">Failed to load categories</div>';
+        this.container.innerHTML =
+          '<div class="error-message">Failed to load categories</div>';
       }
     },
 
     renderCategories(categories) {
       if (!Array.isArray(categories) || categories.length === 0) {
-        this.container.innerHTML = '<div class="no-results">No categories found</div>';
+        this.container.innerHTML =
+          '<div class="no-results">No categories found</div>';
         return;
       }
 
@@ -651,11 +730,17 @@
           <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
         </button>
         <div class="categories-slider">
-          ${categories.map(category => `
-            <div class="category-card" onclick="window.location.href='/search?q=${encodeURIComponent(category)}'">
+          ${categories
+            .map(
+              (category) => `
+            <div class="category-card" onclick="window.location.href='/search?q=${encodeURIComponent(
+              category
+            )}'">
               <div class="category-title">${category}</div>
             </div>
-          `).join('')}
+          `
+            )
+            .join('')}
         </div>
         <button id="nextButton" class="nav-button next-button" aria-label="Next categories">
           <svg viewBox="0 0 24 24"><path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/></svg>
@@ -663,26 +748,34 @@
       `;
 
       this.currentPosition = 0;
-      
-      document.getElementById('prevButton')?.addEventListener('click', () => this.slide('prev'));
-      document.getElementById('nextButton')?.addEventListener('click', () => this.slide('next'));
-      
+
+      document
+        .getElementById('prevButton')
+        ?.addEventListener('click', () => this.slide('prev'));
+      document
+        .getElementById('nextButton')
+        ?.addEventListener('click', () => this.slide('next'));
+
       this.updateNavigationButtons();
       this.observeResize();
     },
 
     slide(direction) {
       if (this.sliding) return;
-      
+
       const slider = document.querySelector('.categories-slider');
       if (!slider) return;
-      
+
       this.sliding = true;
-      const cardWidth = document.querySelector('.category-card')?.offsetWidth + 10;
+      const cardWidth =
+        document.querySelector('.category-card')?.offsetWidth + 10;
       const containerWidth = this.container.offsetWidth;
       const sliderWidth = slider.scrollWidth;
-      const maxPosition = Math.max(0, Math.ceil((sliderWidth - containerWidth) / cardWidth));
-      
+      const maxPosition = Math.max(
+        0,
+        Math.ceil((sliderWidth - containerWidth) / cardWidth)
+      );
+
       if (direction === 'prev' && this.currentPosition > 0) {
         this.currentPosition--;
       } else if (direction === 'next' && this.currentPosition < maxPosition) {
@@ -691,9 +784,9 @@
 
       const offset = -this.currentPosition * cardWidth;
       slider.style.transform = `translateX(${offset}px)`;
-      
+
       this.updateNavigationButtons();
-      
+
       setTimeout(() => {
         this.sliding = false;
       }, 300);
@@ -703,17 +796,21 @@
       const prevButton = document.getElementById('prevButton');
       const nextButton = document.getElementById('nextButton');
       const slider = document.querySelector('.categories-slider');
-      
+
       if (!slider || !prevButton || !nextButton) return;
-      
+
       const containerWidth = this.container.offsetWidth;
       const sliderWidth = slider.scrollWidth;
-      const cardWidth = document.querySelector('.category-card')?.offsetWidth + 10;
-      const maxPosition = Math.max(0, Math.ceil((sliderWidth - containerWidth) / cardWidth));
+      const cardWidth =
+        document.querySelector('.category-card')?.offsetWidth + 10;
+      const maxPosition = Math.max(
+        0,
+        Math.ceil((sliderWidth - containerWidth) / cardWidth)
+      );
 
       prevButton.disabled = this.currentPosition <= 0;
       nextButton.disabled = this.currentPosition >= maxPosition;
-      
+
       const showNavigation = sliderWidth > containerWidth;
       prevButton.style.display = showNavigation ? 'flex' : 'none';
       nextButton.style.display = showNavigation ? 'flex' : 'none';
@@ -724,7 +821,7 @@
         this.updateNavigationButtons();
       });
       resizeObserver.observe(this.container);
-    }
+    },
   };
 
   // Main initialization
@@ -735,7 +832,7 @@
     ProductManager.init();
     ModalManager.init();
     CartManager.init();
-    
+
     // Initialize AI Categories with delay for non-critical loading
     setTimeout(() => {
       AICategories.init();
@@ -754,5 +851,4 @@
   } else {
     initializeProduct();
   }
-
-})(); 
+})();
