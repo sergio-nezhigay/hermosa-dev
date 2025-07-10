@@ -26,6 +26,7 @@
   margin: 0;
   font-weight: 700;
   line-height: 1.2;
+  color: var(--Black, #000);
 }
 
 .video-banner__heading.h1 {
