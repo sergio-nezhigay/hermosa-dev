@@ -377,6 +377,10 @@
         if (err) console.error('Customer Privacy API load error:', err);
       });
     </script>
+
+    {%- if template.name == 'product' -%}
+      {{ 'judgeme-custom.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} main_section animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
