@@ -1,8 +1,6 @@
 {% comment %}
   Feature Highlights Snippet for Art Products
-
-  This snippet displays a list of key features for art products, such as original artwork, materials used, artist signature, and more.
-    It supports optional icons and a maximum number of features to display.
+    This snippet displays a list of key features for art products, such as original artwork, materials used, artist signature, and more.
 {% endcomment %}
 
 {% liquid
@@ -10,9 +8,16 @@
   assign show_icons = show_icons | default: true
   assign max_features = max_features | default: 6
 
-  # Create feature objects as strings
-  assign feature_data = 'Original Artwork|Hand-painted by skilled artists, Museum-Quality Canvas|Printed on premium cotton canvas with archival inks for lasting vibrancy|materials,Artist Signature|Each painting is personally signed by the artist for authenticity|quality,Ready to Hang|Comes with pre-installed hanging hardware and gallery-wrapped edges|shipping,Protective Varnish|Sealed with UV-protective varnish to prevent fading and damage|materials,Certificate of Authenticity|Includes official documentation verifying the artwork and artist|quality'
-  assign features_raw = feature_data | split: ','
+  # Feature data in a more common format
+  assign features_raw = ''
+  assign features_raw = features_raw | append: 'Original Artwork||Hand-painted by skilled artists||artwork,'
+  assign features_raw = features_raw | append: 'Museum-Quality Canvas||Printed on premium cotton canvas with archival inks for lasting vibrancy||materials,'
+  assign features_raw = features_raw | append: 'Artist Signature||Each painting is personally signed by the artist for authenticity||quality,'
+  assign features_raw = features_raw | append: 'Ready to Hang||Comes with pre-installed hanging hardware and gallery-wrapped edges||shipping,'
+  assign features_raw = features_raw | append: 'Protective Varnish||Sealed with UV-protective varnish to prevent fading and damage||materials,'
+  assign features_raw = features_raw | append: 'Certificate of Authenticity||Includes official documentation verifying the artwork and artist||quality'
+
+  assign features_raw = features_raw | split: ','
 %}
 
 <style>
@@ -35,25 +40,23 @@
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
-    background: rgb(var(--color-background));
+    background: #ededed;
     border-radius: var(--text-boxes-radius);
     padding: 2rem;
-    border: var(--text-boxes-border-width) solid rgba(var(--color-foreground), var(--text-boxes-border-opacity));
-    box-shadow: var(--text-boxes-shadow-horizontal-offset) var(--text-boxes-shadow-vertical-offset)
-      var(--text-boxes-shadow-blur-radius) rgba(var(--color-shadow), var(--text-boxes-shadow-opacity));
+    border: var(--text-boxes-border-width) solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     transition: transform var(--duration-short) ease, box-shadow var(--duration-short) ease;
   }
 
   .feature-highlights li:hover {
     transform: translateY(-0.2rem);
-    box-shadow: var(--text-boxes-shadow-horizontal-offset) calc(var(--text-boxes-shadow-vertical-offset) + 0.2rem)
-      calc(var(--text-boxes-shadow-blur-radius) + 0.2rem) rgba(var(--color-shadow), var(--text-boxes-shadow-opacity));
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
 
   .feature-highlights li svg {
     min-width: 2.4rem;
     height: 2.4rem;
-    color: rgb(var(--color-link));
+    color: black;
     flex-shrink: 0;
   }
 
@@ -61,7 +64,7 @@
     margin: 0 0 0.5rem;
     font-size: calc(var(--font-heading-scale) * 1.4rem);
     line-height: calc(1 + 0.3 / max(1, var(--font-heading-scale)));
-    color: rgb(var(--color-foreground));
+    color: black;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04rem;
@@ -70,7 +73,7 @@
   .feature-highlights p {
     margin: 0;
     font-size: 1.4rem;
-    color: rgba(var(--color-foreground), 0.75);
+    color: black;
     line-height: calc(1 + 0.5 / var(--font-body-scale));
     letter-spacing: 0.04rem;
     font-family: var(--font-body-family);
@@ -101,19 +104,6 @@
       gap: 2rem;
     }
   }
-
-  /* Focus states for accessibility */
-  .feature-highlights li:focus-visible {
-    outline: var(--focused-base-outline);
-    outline-offset: var(--focused-base-outline-offset);
-    box-shadow: var(--focused-base-box-shadow);
-  }
-
-  .feature-highlights li:focus:not(:focus-visible) {
-    outline: none;
-    box-shadow: var(--text-boxes-shadow-horizontal-offset) var(--text-boxes-shadow-vertical-offset)
-      var(--text-boxes-shadow-blur-radius) rgba(var(--color-shadow), var(--text-boxes-shadow-opacity));
-  }
 </style>
 
 {% if features_raw and features_raw.size > 0 %}
@@ -121,7 +111,7 @@
     <ul role="list">
       {% for feature_raw in features_raw limit: max_features %}
         {% liquid
-          assign feature_parts = feature_raw | split: '|'
+          assign feature_parts = feature_raw | split: '||'
           assign feature_title = feature_parts[0] | strip
           assign feature_desc = feature_parts[1] | strip
           assign feature_icon = feature_parts[2] | strip | default: 'star'

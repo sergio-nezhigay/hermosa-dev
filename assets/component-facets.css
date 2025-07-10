@@ -821,12 +821,6 @@ a.active-facets__button.focused .active-facets__button-inner {
   transform: translateX(0);
 }
 
-@-moz-document url-prefix() {
-  .mobile-facets__disclosure[open] .mobile-facets__inner {
-    transform: translateX(0);
-  }
-}
-
 .mobile-facets__header {
   border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.08);
   padding: 1rem 2.5rem;
