@@ -1,0 +1,440 @@
+{% doc %}
+  @prompt
+    Create a fine and modernly styled animated benefits section for a home page with 4 benefits for a picture/art store. Include smooth animations and modern design. Benefits should highlight: 1) High-quality prints with premium materials, 2) Fast worldwide shipping with secure packaging, 3) Easy returns and satisfaction guarantee, 4) Curated collection from talented artists. Use clean typography, subtle hover effects, and responsive design.
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .benefits-container-{{ ai_gen_id }} {
+    padding: {{ block.settings.section_padding }}px 0;
+    background-color: {{ block.settings.background_color }};
+  }
+
+  .benefits-wrapper-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .benefits-header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .benefits-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.heading_color }};
+    margin-bottom: 16px;
+  }
+
+  .benefits-subtitle-{{ ai_gen_id }} {
+    font-size: {{ block.settings.subheading_size }}px;
+    color: {{ block.settings.text_color }};
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  .benefits-grid-{{ ai_gen_id }} {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+  }
+
+  .benefit-item-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    background-color: {{ block.settings.card_background_color }};
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .benefit-item-{{ ai_gen_id }}:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .benefit-icon-{{ ai_gen_id }} {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: {{ block.settings.icon_color }};
+    position: relative;
+  }
+
+  .benefit-icon-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .benefit-title-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_title_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.card_title_color }};
+    margin-bottom: 12px;
+  }
+
+  .benefit-description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.card_text_size }}px;
+    color: {{ block.settings.card_text_color }};
+    line-height: 1.6;
+  }
+
+  @media screen and (max-width: 991px) {
+    .benefits-grid-{{ ai_gen_id }} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 767px) {
+    .benefits-grid-{{ ai_gen_id }} {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .benefit-item-{{ ai_gen_id }} {
+      padding: 24px 16px;
+    }
+
+    .benefits-title-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | minus: 6 }}px;
+    }
+
+    .benefits-subtitle-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size | minus: 2 }}px;
+    }
+  }
+{% endstyle %}
+
+<benefits-section-{{ ai_gen_id }} class="benefits-container-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="benefits-wrapper-{{ ai_gen_id }}">
+    <div class="benefits-header-{{ ai_gen_id }}">
+      <h2 class="benefits-title-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+      <div class="benefits-subtitle-{{ ai_gen_id }}">{{ block.settings.subheading }}</div>
+    </div>
+    
+    <div class="benefits-grid-{{ ai_gen_id }}">
+      <!-- Benefit 1 -->
+      <div class="benefit-item-{{ ai_gen_id }}" data-benefit-index="1">
+        <div class="benefit-icon-{{ ai_gen_id }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 10C10.1046 10 11 9.10457 11 8C11 6.89543 10.1046 6 9 6C7.89543 6 7 6.89543 7 8C7 9.10457 7.89543 10 9 10Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.67 18.95L7.6 15.64C8.39 15.11 9.53 15.17 10.24 15.78L10.57 16.07C11.35 16.74 12.61 16.74 13.39 16.07L17.55 12.5C18.33 11.83 19.59 11.83 20.37 12.5L22 13.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="benefit-title-{{ ai_gen_id }}">{{ block.settings.benefit_1_title }}</h3>
+        <p class="benefit-description-{{ ai_gen_id }}">{{ block.settings.benefit_1_text }}</p>
+      </div>
+      
+      <!-- Benefit 2 -->
+      <div class="benefit-item-{{ ai_gen_id }}" data-benefit-index="2">
+        <div class="benefit-icon-{{ ai_gen_id }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.99998 3H8.99998C7.04998 8.84 7.04998 15.16 8.99998 21H7.99998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 3C16.95 8.84 16.95 15.16 15 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 16V15C8.84 16.95 15.16 16.95 21 15V16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M3 9.0001C8.84 7.0501 15.16 7.0501 21 9.0001" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="benefit-title-{{ ai_gen_id }}">{{ block.settings.benefit_2_title }}</h3>
+        <p class="benefit-description-{{ ai_gen_id }}">{{ block.settings.benefit_2_text }}</p>
+      </div>
+      
+      <!-- Benefit 3 -->
+      <div class="benefit-item-{{ ai_gen_id }}" data-benefit-index="3">
+        <div class="benefit-icon-{{ ai_gen_id }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7.75 12L10.58 14.83L16.25 9.17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="benefit-title-{{ ai_gen_id }}">{{ block.settings.benefit_3_title }}</h3>
+        <p class="benefit-description-{{ ai_gen_id }}">{{ block.settings.benefit_3_text }}</p>
+      </div>
+      
+      <!-- Benefit 4 -->
+      <div class="benefit-item-{{ ai_gen_id }}" data-benefit-index="4">
+        <div class="benefit-icon-{{ ai_gen_id }}">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.16992 7.44L11.9999 12.55L20.7699 7.47" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 21.61V12.54" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.92989 2.48L4.58989 5.45C3.37989 6.12 2.38989 7.8 2.38989 9.18V14.83C2.38989 16.21 3.37989 17.89 4.58989 18.56L9.92989 21.53C11.0699 22.16 12.9399 22.16 14.0799 21.53L19.4199 18.56C20.6299 17.89 21.6199 16.21 21.6199 14.83V9.18C21.6199 7.8 20.6299 6.12 19.4199 5.45L14.0799 2.48C12.9299 1.84 11.0699 1.84 9.92989 2.48Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="benefit-title-{{ ai_gen_id }}">{{ block.settings.benefit_4_title }}</h3>
+        <p class="benefit-description-{{ ai_gen_id }}">{{ block.settings.benefit_4_text }}</p>
+      </div>
+    </div>
+  </div>
+</benefits-section-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class BenefitsSection{{ai_gen_id}} extends HTMLElement {
+      constructor() {
+        super();
+        this.benefitItems = this.querySelectorAll('.benefit-item-{{ ai_gen_id }}');
+        this.observer = null;
+      }
+
+      connectedCallback() {
+        this.setupAnimations();
+      }
+
+      setupAnimations() {
+        if ('IntersectionObserver' in window) {
+          this.observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const index = parseInt(entry.target.dataset.benefitIndex);
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                this.observer.unobserve(entry.target);
+              }
+            });
+          }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+          });
+
+          this.benefitItems.forEach((item, index) => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px)';
+            item.style.transition = `opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease`;
+            item.style.transitionDelay = `${index * 0.15}s`;
+            this.observer.observe(item);
+          });
+        } else {
+          // Fallback for browsers that don't support IntersectionObserver
+          this.benefitItems.forEach((item) => {
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          });
+        }
+      }
+
+      disconnectedCallback() {
+        if (this.observer) {
+          this.observer.disconnect();
+        }
+      }
+    }
+
+    customElements.define('benefits-section-{{ ai_gen_id }}', BenefitsSection{{ai_gen_id}});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Art Benefits",
+  "tag": null,
+  "class": "art-benefits-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Choose Our Art Store"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We're committed to providing exceptional art pieces with premium service and quality you can trust."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 1"
+    },
+    {
+      "type": "text",
+      "id": "benefit_1_title",
+      "label": "Title",
+      "default": "Premium Quality Prints"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_1_text",
+      "label": "Description",
+      "default": "Our prints are made with archival-quality materials that ensure vibrant colors and exceptional detail for years to come."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 2"
+    },
+    {
+      "type": "text",
+      "id": "benefit_2_title",
+      "label": "Title",
+      "default": "Worldwide Shipping"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_2_text",
+      "label": "Description",
+      "default": "Fast and secure shipping to your doorstep with careful packaging to ensure your art arrives in perfect condition."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 3"
+    },
+    {
+      "type": "text",
+      "id": "benefit_3_title",
+      "label": "Title",
+      "default": "Satisfaction Guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_3_text",
+      "label": "Description",
+      "default": "Not completely satisfied? Our hassle-free return policy ensures you'll love your purchase or get your money back."
+    },
+    {
+      "type": "header",
+      "content": "Benefit 4"
+    },
+    {
+      "type": "text",
+      "id": "benefit_4_title",
+      "label": "Title",
+      "default": "Curated Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "benefit_4_text",
+      "label": "Description",
+      "default": "Discover unique pieces from talented artists around the world, carefully selected for quality and artistic excellence."
+    },
+    {
+      "type": "header",
+      "content": "Style Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Subheading Color",
+      "default": "#4a4a4a"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_title_color",
+      "label": "Card Title Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Text Color",
+      "default": "#4a4a4a"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon Color",
+      "default": "#4770db"
+    },
+    {
+      "type": "range",
+      "id": "section_padding",
+      "min": 40,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "label": "Section Padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 24,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading Size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 16,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Title Size",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "card_text_size",
+      "min": 12,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Card Text Size",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Art Benefits"
+    }
+  ]
+}
+{% endschema %}
